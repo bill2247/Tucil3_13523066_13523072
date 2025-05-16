@@ -1,20 +1,24 @@
 import java.util.*;
 
 public class BoardState {
-    public int rows, cols;
-    public Map<Character, Piece> pieces = new HashMap<>();
-    public int exitRow, exitCol;
+    public static int rows, cols;
+    public static Map<Character, Piece> pieces = new HashMap<>();
+    public static int exitRow, exitCol;
+    public static Piece primaryPiece = null;
     public List<char[]> board = new ArrayList<>();
-    public Piece primaryPiece = null;
+    // add: map of character to top-left-index's coordinate, non static
+    
+    public static Map<Integer, ArrayList<Integer>> idealHPieceCoordinates; // lokasi ideal piece horizontal
+    public static Map<Integer, ArrayList<Integer>> idealVPieceCoordinates; // lokasi ideal piece vertikal
 
     public BoardState(int rows, int cols) {
-        this.rows = rows;
-        this.cols = cols;
+        BoardState.rows = rows;
+        BoardState.cols = cols;
     }
 
     public void setExitPoint(int r, int c) {
-        this.exitRow = r;
-        this.exitCol = c;
+        BoardState.exitRow = r;
+        BoardState.exitCol = c;
     }
 
     public void addCell(char id, int r, int c) {
@@ -44,4 +48,12 @@ public class BoardState {
             pieces.put(id, p);
         }
     }
+
+    public void deleteCell(char id){
+        // ...
+    }
+
+    // public ArrayList<Map<Piece, Coordinate>> generateLegalMoves(){
+    // ongoing, ghif
+    // }
 }

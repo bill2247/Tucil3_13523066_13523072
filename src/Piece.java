@@ -2,7 +2,7 @@ public class Piece {
     public char id;
     public Orientation orientation;
     public int length;
-    public Coordinat upLeft;
+    public Coordinate upLeft;
 
     public Piece(char id, Orientation orientation, int length) {
         this.id = id;
@@ -19,7 +19,7 @@ public class Piece {
     public int getLength() {
         return length;
     }
-    public Coordinat getUpLeft() {
+    public Coordinate getUpLeft() {
         return upLeft;
     }
     public void setId(char id) {
@@ -31,7 +31,7 @@ public class Piece {
     public void setLength(int length) {
         this.length = length;
     }
-    public void setUpLeft(Coordinat upLeft) {
+    public void setUpLeft(Coordinate upLeft) {
         this.upLeft = upLeft;
     }
 }
