@@ -1,4 +1,10 @@
 public class Cost {
+    public static int algorithm; // 1. UCS, 2.GBFS, 3.A*
+
+    public Cost(int algorithm){
+        Cost.algorithm = algorithm;
+    }
+
     public static int f(BoardState state){
         // sesuaikan dengan algo
         return 0;
