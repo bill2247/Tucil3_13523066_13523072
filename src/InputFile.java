@@ -2,129 +2,170 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class InputFile {
-    private String filePath;
-    private BoardState boardState;
+    private final String filePath;
+    private final BoardState boardState;
 
     public InputFile(String filePath) {
         this.filePath = filePath;
         this.boardState = new BoardState(0, 0);
-        readFile();
+        loadBoardFromFile();
     }
+
     public BoardState getBoardState() {
         return boardState;
     }
 
-    private void readFile(){
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            // membaca line pertama untuk row dan col
-            String line;
-            line = br.readLine();
-            String[] rowCol = line.split(" ");
-            int row = Integer.parseInt(rowCol[0]);
-            int col = Integer.parseInt(rowCol[1]);
-            // membaca line kedua untuk jumlah piece
-            line = br.readLine();
-            // menghitung jumlah piece dan array of id piece untuk handling kasus numPiece != jumlah piece yang ada. 
-            String[] row2 = line.split(" ");
-            int numPieces = Integer.parseInt(row2[0]);
-            List<Character> idPieces = new ArrayList<>();
-            // membaca line ketiga untuk mengenali exit point 
-            char[][] matrixBoard = new char[row][col];
-            boolean isExitPoint = false;
-            line = br.readLine();
-            char[] rowContent = line.toCharArray();
-            for (int i = 0; i < rowContent.length; i++) {
-                char cell = rowContent[i];
-                if (cell == 'K') {
-                    boardState.setExitPoint(new Coordinate((i+1)/2, 0));
-                    isExitPoint = true;
-                    break;
-                }
+    private void loadBoardFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            int rows = 0, cols = 0;
+            int expectedPieces;
+            List<Character> foundPieceIds = new ArrayList<>();
+
+            // Parse header lines
+            String line = reader.readLine();
+            int[] dims = parseDimensions(line);
+            rows = dims[0];
+            cols = dims[1];
+
+            line = reader.readLine();
+            expectedPieces = parseExpectedPieceCount(line);
+
+            // Prepare board matrix
+            char[][] matrix = new char[rows][cols];
+
+            boolean exitFound = parseTopExit(line = reader.readLine(), matrix, foundPieceIds);
+
+            // Read remaining rows
+            exitFound |= parseBoardRows(reader, matrix, foundPieceIds, rows, cols, exitFound);
+
+            validateMatrixSize(matrix, rows, cols);
+            validateUniquePieces(foundPieceIds, expectedPieces);
+
+            // If exit still not found, check last line
+            if (!exitFound) {
+                line = reader.readLine();
+                parseBottomExit(line, rows - 1);
             }
-            // membaca line berikutnya untuk mnegenali exit point dan menyimpan point ke dalam matrixBoard
-            int i = 0;
-            // if (isExitPoint){
-            //     i = 1;
-            // }
-            while (i < row) {
-                if (!(i == 0 && !isExitPoint)) {
-                    line = br.readLine();
-                } 
-                if (line == null) {
-                    break;
-                }
-                rowContent = line.toCharArray();
-                if (rowContent[0] == 'K') {
-                    boardState.setExitPoint(new Coordinate(i, 0));
-                    isExitPoint = true;
-                }
-                if (rowContent[rowContent.length - 1] == 'K') {
-                    boardState.setExitPoint(new Coordinate(i, col - 1));
-                    isExitPoint = true;
-                }
-                int colCounter = 0;
-                for (int j = 0; j < rowContent.length; j++) {
-                    char cell = rowContent[j];
-                    if (cell != ' ' && cell != 'K') {
-                        if (colCounter >= col) {
-                            colCounter = col - 1;
-                        }
-                        if (cell != 'K'){
-                            matrixBoard[i][colCounter] = cell;
-                        }
-                        // jika id piece sudah ada di dalam list, maka tidak perlu ditambahkan
-                        if (!idPieces.contains(cell)) {
-                            idPieces.add(cell);
-                        }
-                        colCounter++;
-                    }
-                }
-                i++;
-            }
-            if (row != matrixBoard.length || col != matrixBoard[0].length) {
-                throw new IllegalArgumentException("Invalid matrix size");
-            }
-            // ambil id piece yang unik dan hitung jumlah piece
-            List<Character> uniquePieces = new ArrayList<>();
-            for (char id : idPieces) {
-                if (!uniquePieces.contains(id)) {
-                    uniquePieces.add(id);
-                }
-            }
-            // jika jumlah piece tidak sesuai dengan yang ada di file
-            if (uniquePieces.size() != numPieces + 2) { // 2 adalah piece '.' dan 'P'
-                throw new IllegalArgumentException("Invalid number of pieces, expected: " + numPieces + ", found: " + uniquePieces.size() + " thoose elements are: " + uniquePieces);
-            }
-            // membaca line terakhir untuk mengenali exit point jika belum ditemukan
-            if (!isExitPoint){
-                line = br.readLine();
-                rowContent = line.toCharArray();
-                for (int j = 0; j < rowContent.length; j++) {
-                    char cell = rowContent[j];
-                    if (cell == 'K') {
-                        boardState.setExitPoint(new Coordinate((j+1)/2, row - 1));
-                        break;
-                    }
-                }
-            }
-            // menyimpan matrixBoard ke dalam boardState
-            BoardState.cols = col;
-            BoardState.rows = row;
-            boardState.setBoard(matrixBoard);
-            for (int j = 0; j < row; j++) {
-                for (int k = 0; k < col; k++) {
-                    char cell = matrixBoard[j][k];
-                    boolean h = boardState.addCell(cell, j, k);
-                    if (!h) {
-                        System.out.println("Invalid cell: " + cell + " at (" + j + ", " + k + ")");
-                    }
-                }
-            }
+
+            // Finalize board state
+            BoardState.rows = rows;
+            BoardState.cols = cols;
+            boardState.setBoard(matrix);
+            populateBoardState(matrix, rows, cols);
+
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private int[] parseDimensions(String header) {
+        String[] parts = header.split(" ");
+        int r = Integer.parseInt(parts[0]);
+        int c = Integer.parseInt(parts[1]);
+        return new int[]{r, c};
+    }
+
+    private int parseExpectedPieceCount(String line) {
+        String[] parts = line.split(" ");
+        return Integer.parseInt(parts[0]);
+    }
+
+    private boolean parseTopExit(String line, char[][] matrix, List<Character> pieceIds) {
+        char[] cells = line.toCharArray();
+        for (int j = 0; j < cells.length; j++) {
+            if (cells[j] == 'K') {
+                boardState.setExitPoint(new Coordinate((j + 1) / 2, 0));
+                return true;
+            }
+        }
+        // Also process row 0 for pieces
+        extractRowData(cells, matrix, 0, pieceIds);
+        return false;
+    }
+
+    private boolean parseBoardRows(BufferedReader reader, char[][] matrix,
+                                   List<Character> pieceIds, int totalRows, int totalCols, boolean exitAlreadyFound)
+            throws IOException {
+        boolean exitFound = exitAlreadyFound;
+        for (int i = 1; i < totalRows; i++) {
+            String line = reader.readLine();
+            if (line == null) break;
+
+            char[] cells = line.toCharArray();
+            // Check side exits
+            if (!exitFound) {
+                if (cells[0] == 'K') {
+                    boardState.setExitPoint(new Coordinate(i, 0));
+                    exitFound = true;
+                } else if (cells[cells.length - 1] == 'K') {
+                    boardState.setExitPoint(new Coordinate(i, totalCols - 1));
+                    exitFound = true;
+                }
+            }
+            extractRowData(cells, matrix, i, pieceIds);
+        }
+        return exitFound;
+    }
+
+    private void extractRowData(char[] cells, char[][] matrix, int rowIndex, List<Character> pieceIds) {
+        int colIndex = 0;
+        for (char cell : cells) {
+            if (cell != ' ' && cell != 'K') {
+                if (colIndex >= matrix[rowIndex].length) {
+                    colIndex = matrix[rowIndex].length - 1;
+                }
+                matrix[rowIndex][colIndex] = cell;
+                if (!pieceIds.contains(cell)) {
+                    pieceIds.add(cell);
+                }
+                colIndex++;
+            }
+        }
+    }
+
+    private void parseBottomExit(String line, int bottomRow) {
+        char[] cells = line.toCharArray();
+        for (int j = 0; j < cells.length; j++) {
+            if (cells[j] == 'K') {
+                boardState.setExitPoint(new Coordinate((j + 1) / 2, bottomRow));
+                break;
+            }
+        }
+    }
+
+    private void validateMatrixSize(char[][] matrix, int rows, int cols) {
+        if (matrix.length != rows || matrix[0].length != cols) {
+            throw new IllegalArgumentException("Invalid matrix size");
+        }
+    }
+
+    private void validateUniquePieces(List<Character> pieceIds, int expectedCount) {
+        Set<Character> unique = new HashSet<>(pieceIds);
+        // exclude '.' and 'P'
+        unique.remove('.');
+        unique.remove('P');
+
+        if (unique.size() != expectedCount) {
+            throw new IllegalArgumentException(
+                "Invalid number of pieces, expected: " + expectedCount + ", found: " + unique.size()
+                + " elements: " + unique);
+        }
+    }
+
+    private void populateBoardState(char[][] matrix, int rows, int cols) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                char cell = matrix[i][j];
+                boolean valid = boardState.addCell(cell, i, j);
+                if (!valid) {
+                    System.out.println("Invalid cell: " + cell + " at (" + i + ", " + j + ")");
+                }
+            }
         }
     }
 }
