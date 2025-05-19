@@ -4,26 +4,34 @@ public class Main {
     public static void main(String[] args) {
         // Create an instance of InputFile
         // input user input file
-        System.out.print("Please enter the input file path: ");
-        Scanner scanner = new Scanner(System.in);
-        String filePath ;
-        while(true) {
-            filePath = scanner.nextLine();
-            if (filePath.equals("exit")) {
-                System.out.println("Exiting...");
-                return;
-            }
-            if (filePath.endsWith(".txt")) {
-                break;
-            } else {
-                System.out.print("Invalid file path. Please enter a valid .txt file path: ");
-            }
-        }
-        scanner.close();
+        // System.out.print("Please enter the input file path: ");
+        // Scanner scanner = new Scanner(System.in);
+        // String filePath ;
+        // while(true) {
+        //     filePath = scanner.nextLine();
+        //     if (filePath.equals("exit")) {
+        //         System.out.println("Exiting...");
+        //         return;
+        //     }
+        //     if (filePath.endsWith(".txt")) {
+        //         break;
+        //     } else {
+        //         System.out.print("Invalid file path. Please enter a valid .txt file path: ");
+        //     }
+        // }
+        // scanner.close();
+        String filePath = "input.txt";
         InputFile inputFile = new InputFile("test/" + filePath);
         
         // Get the board state from the input file
         BoardState boardState = inputFile.getBoardState();
+
+        // Validation
+        // hitung waktu unutk menjalankan validasi
+        long startTime = System.currentTimeMillis();
+        Validation val = new Validation(boardState);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Validation Time: " + (endTime - startTime) + " ms");
         
         // Print the board state
         System.out.println("Board State:");

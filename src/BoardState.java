@@ -5,7 +5,7 @@ public class BoardState {
     public static Map<Character, Piece> pieces = new HashMap<>();
     public static int exitRow, exitCol;
     public static Piece primaryPiece = null;
-    public List<char[]> board = new ArrayList<>();
+    private List<char[]> board = new ArrayList<>();
     // add: map of character to top-left-index's coordinate, non static
     public Map<Character, Coordinate> piecesLocation = new HashMap<>();
     
@@ -27,6 +27,10 @@ public class BoardState {
         }
     }
 
+    // public Coordinate getExitPoint() {
+    //     return new Coordinate(exitRow, exitCol);
+    // }
+
     public BoardState cloneBoardState(){
         BoardState newState = new BoardState(rows, cols);
         for(char[] row : this.board){
@@ -41,13 +45,6 @@ public class BoardState {
         return newState;
     }
 
-    // public void addCell(char id, int r, int c) {
-    //     if (id == '.') return;
-    //     if (id == 'K') {
-    //         setExitPoint(r, c);
-    //         return;
-    //     }
-    // }
     public boolean addCell(char id, int r, int c) {
         if (id == 'K' && (id < 'A' || id > 'Z' || id != '.')) {
             return false;
