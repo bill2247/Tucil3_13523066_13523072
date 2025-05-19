@@ -4,10 +4,11 @@ public class Piece {
     public int length;
     public Coordinate upLeft;
 
-    public Piece(char id, Orientation orientation, int length) {
+    public Piece(char id, Orientation orientation, int length, Coordinate upLeft) {
         this.id = id;
         this.orientation = orientation;
         this.length = length;
+        this.upLeft = upLeft;
     }
 
     public char getId() {
@@ -33,6 +34,15 @@ public class Piece {
     }
     public void setUpLeft(Coordinate upLeft) {
         this.upLeft = upLeft;
+    }
+    public void addLength(int length) {
+        this.length += length;
+    }
+    public void printPiece() {
+        System.out.println("Piece ID: " + id);
+        System.out.println("Orientation: " + orientation);
+        System.out.println("Length: " + length);
+        System.out.println("UpLeft Coordinate: (" + upLeft.x + ", " + upLeft.y + ")");
     }
 }
 

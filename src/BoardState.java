@@ -17,9 +17,14 @@ public class BoardState {
         BoardState.cols = cols;
     }
 
-    public void setExitPoint(int r, int c) {
-        BoardState.exitRow = r;
-        BoardState.exitCol = c;
+    public void setExitPoint(Coordinate c) {
+        BoardState.exitRow = c.x;
+        BoardState.exitCol = c.y;
+        if (BoardState.exitCol == 0 || BoardState.exitCol == cols) {
+            BoardState.primaryPiece = new Piece('P', Orientation.HORIZONTAL, 0, null);
+        } else {
+            BoardState.primaryPiece = new Piece('P', Orientation.VERTICAL, 0, null);
+        }
     }
 
     public BoardState cloneBoardState(){
@@ -36,32 +41,52 @@ public class BoardState {
         return newState;
     }
 
-    public void addCell(char id, int r, int c) {
-        if (id == '.') return;
-        if (id == 'K') {
-            setExitPoint(r, c);
-            return;
+    // public void addCell(char id, int r, int c) {
+    //     if (id == '.') return;
+    //     if (id == 'K') {
+    //         setExitPoint(r, c);
+    //         return;
+    //     }
+    // }
+    public boolean addCell(char id, int r, int c) {
+        if (id == 'K' && (id < 'A' || id > 'Z' || id != '.')) {
+            return false;
         }
-        if (id == 'S') {
-            if (primaryPiece != null) {
-                primaryPiece = new Piece(id, Orientation.VERTICAL, 1);
-                pieces.put(id, primaryPiece);
-                return;
-            } 
+        if (id == '.') return true;
+        if (id == 'P') {
             primaryPiece.setLength(primaryPiece.getLength() + 1);
+            primaryPiece.setUpLeft(new Coordinate(r, c));
+            return true;
         }
         if (pieces.containsKey(id)) {
-            Piece p = pieces.get(id);
-            p.setLength(p.getLength() + 1);
-            if (r == p.getUpLeft().x){
-                p.setOrientation(Orientation.HORIZONTAL);
+            pieces.get(id).addLength(1);
+            Coordinate p = pieces.get(id).getUpLeft();
+            if (r == p.x){
+                pieces.get(id).setOrientation(Orientation.HORIZONTAL);
+            } else if (c == p.y) {
+                pieces.get(id).setOrientation(Orientation.VERTICAL);
             } else {
-                p.setOrientation(Orientation.VERTICAL);
+                return false;
             }
         } else {
-            Piece p = new Piece(id, Orientation.HORIZONTAL, 1);
+            Piece p = new Piece(id, Orientation.HORIZONTAL, 1, new Coordinate(r, c));
             pieces.put(id, p);
+            return true;
         }
+        return true;
+    }
+
+    public void setBoard(char[][] board) {
+        for (int i = 0; i < rows; i++) {
+            this.board.add(board[i]);
+        }
+    }
+    public char[][] getBoard() {
+        char[][] boardArray = new char[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            boardArray[i] = this.board.get(i);
+        }
+        return boardArray;
     }
 
     public void addPiece(char id, int r, int c){
@@ -166,5 +191,13 @@ public class BoardState {
         };
 
         return res;
+    }
+    // public ArrayList<Map<Piece, Coordinate>> generateLegalMoves(){
+    // ongoing, ghif
+    // }
+    public void printAllPieces() {
+        for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+            entry.getValue().printPiece();
+        }
     }
 }
