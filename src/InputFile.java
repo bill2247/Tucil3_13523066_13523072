@@ -95,9 +95,10 @@ public class InputFile {
 
     private boolean parseTopExit(String line, char[][] matrix, List<Character> pieceIds) {
         char[] cells = line.toCharArray();
+        
         for (int j = 0; j < cells.length; j++) {
             if (cells[j] == 'K') {
-                boardState.setExitPoint(new Coordinate((j + 1) / 2, -1));
+                boardState.setExitPoint(new Coordinate(-1, (j + 1) / 2));
                 return true;
             }
         }
@@ -108,9 +109,15 @@ public class InputFile {
 
     private boolean parseBoardRows(BufferedReader reader, char[][] matrix, List<Character> pieceIds, int totalRows, int totalCols, boolean exitAlreadyFound)throws IOException {
         boolean exitFound = exitAlreadyFound;
-        for (int i = 1; i < totalRows; i++) {
+        int up = totalRows;
+        int down = 1;
+        if (exitAlreadyFound) {
+            // up = totalRows + 1;
+            down = 0;
+        }
+        for (int i = down; i < up; i++) {
             String line = reader.readLine();
-            System.out.println("line: " + line);
+            
             if (line == null) break;
 
             char[] cells = line.toCharArray();
@@ -147,6 +154,7 @@ public class InputFile {
 
     private void parseBottomExit(String line, int bottomRow) {
         char[] cells = line.toCharArray();
+        
         for (int j = 0; j < cells.length; j++) {
             if (cells[j] == 'K') {
                 boardState.setExitPoint(new Coordinate(bottomRow+1, (j + 1) / 2));

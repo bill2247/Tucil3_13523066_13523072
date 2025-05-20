@@ -58,9 +58,7 @@ public class BoardState {
                 } else {
                     return false;
                 }
-                // primaryPiece.setLength(primaryPiece.getLength() + 1);
                 pieces.get(id).addLength(1);
-                System.out.println("len added: " + primaryPiece.getLength());
             } else {
                 pieces.put(id, primaryPiece);
                 primaryPiece.setUpLeft(new Coordinate(r, c));
