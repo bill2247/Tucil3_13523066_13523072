@@ -69,7 +69,7 @@ public class Main {
             System.out.println();
         }
 
-        Cost cost = new Cost(1, tree.getState());
+        Cost cost = new Cost(2, tree.getState());
         Solver solver = new Solver();
         
         Tree goal = solver.solve(tree);

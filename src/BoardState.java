@@ -100,7 +100,7 @@ public class BoardState {
 
     public void addPiece(char id, int r, int c){
         // menambahkan piece ke papan diberikan id dan lokasi kiri-atas nya
-        if(board[r][c] == '.' || (r==-1 && c==-1)){
+        if(board[r][c] != '.' || (r==-1 && c==-1)){
             return;
         }
         Piece currentPiece = pieces.get(id);
@@ -159,7 +159,7 @@ public class BoardState {
                 for(i=0;c-1-i>=0;i++){
                     char checkId = board[r][c-1-i];
                     if(checkId!='.'){break;}
-                    Coordinate checkCoordinate = new Coordinate(c-1-i, r);
+                    Coordinate checkCoordinate = new Coordinate(r, c-1-i);
                     addMove(res, currId, checkCoordinate);
                 }
                 if(currId=='P' && c-1-i == exitCol){
@@ -169,7 +169,7 @@ public class BoardState {
                 for(i=0;c+currPiece.getLength()+i<cols;i++){
                     char checkId = board[r][c+currPiece.getLength()+i];
                     if(checkId!='.'){break;}
-                    Coordinate checkCoordinate = new Coordinate(c+currPiece.getLength()+i, r);
+                    Coordinate checkCoordinate = new Coordinate(r, c+i+1);
                     addMove(res, currId, checkCoordinate);
                 }
                 if(currId=='P' && c+currPiece.getLength()+i == exitCol){
@@ -180,7 +180,7 @@ public class BoardState {
                 for(i=0;r-1-i>=0;i++){
                     char checkId = board[r-1-i][c];
                     if(checkId!='.'){break;}
-                    Coordinate checkCoordinate = new Coordinate(c, r-1-i);
+                    Coordinate checkCoordinate = new Coordinate(r-1-i, c);
                     addMove(res, currId, checkCoordinate);
                 }
                 if(currId=='P' && r-1-i == exitRow){
@@ -190,7 +190,7 @@ public class BoardState {
                 for(i=0;r+currPiece.getLength()+i<rows;i++){
                     char checkId = board[r+currPiece.getLength()+i][c];
                     if(checkId!='.'){break;}
-                    Coordinate checkCoordinate = new Coordinate(c, r+currPiece.getLength()+i);
+                    Coordinate checkCoordinate = new Coordinate(r+i+1, c);
                     addMove(res, currId, checkCoordinate);
                 }
                 if(currId=='P' && r+currPiece.getLength()+i == exitRow){
@@ -209,22 +209,22 @@ public class BoardState {
     }
 
     public void printGameState() {
-        System.out.println("Rows: " + rows);
-        System.out.println("Cols: " + cols);
-        System.out.println("Exit Row: " + exitRow);
-        System.out.println("Exit Col: " + exitCol);
+        // System.out.println("Rows: " + rows);
+        // System.out.println("Cols: " + cols);
+        // System.out.println("Exit Row: " + exitRow);
+        // System.out.println("Exit Col: " + exitCol);
 
-        System.out.println("Primary Piece: " + (primaryPiece != null ? primaryPiece : "null"));
+        // System.out.println("Primary Piece: " + (primaryPiece != null ? primaryPiece : "null"));
 
-        System.out.println("\nPieces:");
-        for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
-            System.out.println("  " + entry.getKey() + ": " + entry.getValue());
-        }
+        // System.out.println("\nPieces:");
+        // for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+        //     System.out.println("  " + entry.getKey() + ": " + entry.getValue());
+        // }
 
-        System.out.println("\nPieces Location:");
-        for (Map.Entry<Character, Coordinate> entry : piecesLocation.entrySet()) {
-            System.out.println("  " + entry.getKey() + ": " + entry.getValue());
-        }
+        // System.out.println("\nPieces Location:");
+        // for (Map.Entry<Character, Coordinate> entry : piecesLocation.entrySet()) {
+        //     System.out.println("  " + entry.getKey() + ": " + entry.getValue());
+        // }
 
         System.out.println("\nBoard:");
         for (int i = 0; i < board.length; i++) {

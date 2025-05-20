@@ -45,19 +45,36 @@ public class Tree implements Comparable<Tree>{
 
     public void generateChildren(){
         Map<Character, ArrayList<Coordinate>> legalMoves = state.generateLegalMoves();
+        // debug
+        System.out.println("--------------");
+        for (Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()) {
+            char key = entry.getKey();
+            ArrayList<Coordinate> coords = entry.getValue();
+
+            System.out.print(key + ": ");
+            for (Coordinate coord : coords) {
+                System.out.print("(" + coord.r + ", " + coord.c + ") ");
+            }
+            System.out.println(); // new line after each entry
+        }
+        System.out.println("--------------");
+        // System.exit(0); // debug
+        int debug=0; // debug
         for(Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()){
             char currId = entry.getKey();            
             ArrayList<Coordinate> currCoordinates = entry.getValue();
+            System.out.println(debug); // debug
+            debug++; // debug
 
             for(int i=0;i<currCoordinates.size();i++){
-                int r = currCoordinates.get(i).c;
-                int c = currCoordinates.get(i).r;
+                int r = currCoordinates.get(i).r;
+                int c = currCoordinates.get(i).c;
                 BoardState newState = state.cloneBoardState();
 
                 // cek tipe gerakan
                 char mt = ' ';
-                int oldR = state.getPiecesLocation().get(currId).c;
-                int oldC = state.getPiecesLocation().get(currId).r;
+                int oldR = state.getPiecesLocation().get(currId).r;
+                int oldC = state.getPiecesLocation().get(currId).c;
                 if(r>oldR){mt = 'd';}
                 else if(r<oldR){mt = 'u';}
                 else if(c<oldC){mt = 'l';}
@@ -65,11 +82,18 @@ public class Tree implements Comparable<Tree>{
 
                 // movement
                 newState.deletePiece(currId);
+                System.out.println("id: " + currId);
+                System.out.println("r : " + r);
+                System.out.println("c : " + c);
                 newState.addPiece(currId, r, c);
+
                 int fn = Cost.f(newState);
+                System.out.println("fn: " + fn);
+                newState.printGameState();
                 updateChildren(newState, fn, mt);
             }
         }
+        System.exit(0); // debug
     }
     // getter idMoved
     public char getIdMoved(){

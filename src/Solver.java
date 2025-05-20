@@ -11,12 +11,8 @@ public class Solver {
         pq.add(t);
         while(pq.isEmpty()==false){
             // -------------- debug --------------
-            System.out.println("kusanagi1");
-            for(Character key : t.getState().getPiecesLocation().keySet()){
-               System.out.println(key);
-            }
-            System.out.println("kusanagi2");
-            System.exit(0);
+            System.out.println("kusanagi");
+
             Tree currentNode = pq.poll();
             if(currentNode.isGoal()){
                 return currentNode;
