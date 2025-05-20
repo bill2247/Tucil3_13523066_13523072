@@ -22,8 +22,8 @@ public class Cost {
         Map<Character, Piece> pieces = BoardState.pieces;
         int GnBefore = 0;
         int GnAfter = 0;
-        Map<Character, Coordinate> piecesLocationBefore = stateBefore.piecesLocation;
-        Map<Character, Coordinate> piecesLocationAfter = stateAfter.piecesLocation;
+        Map<Character, Coordinate> piecesLocationBefore = stateBefore.getPiecesLocation();
+        Map<Character, Coordinate> piecesLocationAfter = stateAfter.getPiecesLocation();
         for (Map.Entry<Character, Piece> entry : pieces.entrySet()){
             char id1 = entry.getKey();
             Piece piece1 = entry.getValue();

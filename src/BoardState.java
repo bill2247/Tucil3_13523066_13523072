@@ -6,7 +6,7 @@ public class BoardState {
     public static int exitRow, exitCol;
     public static Piece primaryPiece = null;
     private char[][] board;
-    public Map<Character, Coordinate> piecesLocation = new HashMap<>();
+    private Map<Character, Coordinate> piecesLocation = new HashMap<>();
     
     public static Map<Integer, ArrayList<Integer>> idealHPieceCoordinates; // lokasi ideal piece horizontal
     public static Map<Integer, ArrayList<Integer>> idealVPieceCoordinates; // lokasi ideal piece vertikal
@@ -15,6 +15,8 @@ public class BoardState {
         BoardState.rows = rows;
         BoardState.cols = cols;
     }
+
+    public Map<Character, Coordinate> getPiecesLocation(){return this.piecesLocation;}
 
     public void setExitPoint(Coordinate c) {
         BoardState.exitRow = c.r;

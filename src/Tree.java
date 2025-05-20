@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Tree {
+public class Tree implements Comparable<Tree>{
     private BoardState state;
     private ArrayList<Tree> children;
     private char moveType; // u r d l
@@ -21,6 +21,7 @@ public class Tree {
     //getter
     public BoardState getState(){return this.state;}
     public ArrayList<Tree> getChildren(){return this.children;}
+    public Tree getParent(){return this.parent;}
     public int getFn(){return this.fn;}
     public char getMoveType(){return this.moveType;}
 
@@ -31,6 +32,15 @@ public class Tree {
         child.moveType = mt;
         child.parent = this;
         this.children.add(child);
+    }
+
+    @Override
+    public int compareTo(Tree other){
+        return Integer.compare(this.fn, other.fn);
+    }
+
+    public boolean isGoal(){
+        return (state.getPiecesLocation().get('P').r == -1 && state.getPiecesLocation().get('P').c == -1);
     }
 
     public void generateChildren(){
@@ -46,8 +56,8 @@ public class Tree {
 
                 // cek tipe gerakan
                 char mt = ' ';
-                int oldR = state.piecesLocation.get(currId).c;
-                int oldC = state.piecesLocation.get(currId).r;
+                int oldR = state.getPiecesLocation().get(currId).c;
+                int oldC = state.getPiecesLocation().get(currId).r;
                 if(r>oldR){mt = 'd';}
                 else if(r<oldR){mt = 'u';}
                 else if(c<oldC){mt = 'l';}
