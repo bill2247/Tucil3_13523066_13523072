@@ -22,7 +22,6 @@ public class Main {
                         InputFile inputFile = new InputFile("test/" + filePath);
                         boardState = inputFile.getBoardState();
                         Validation val = new Validation(boardState);
-                        val.validation();
                     } catch (Exception e) {
                         System.out.println("^Ditemukan kesalahan pada file: " + e.getMessage());
                         continue;

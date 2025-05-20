@@ -135,13 +135,13 @@ public class Validation {
         } else {
             h = Math.max(BoardState.exitCol, BoardState.cols - BoardState.exitCol);
         }
+        System.out.println("h = " + h);
         
         Map<Character, Piece> pieces = BoardState.pieces;
         for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             Piece piece = entry.getValue();
             if (piece.getOrientation() != orientation) {
                 if (piece.getLength() > h) {
-                    System.out.println("h   : " + h);
                     int rowPiece = piece.getUpLeft().r;
                     int colPiece = piece.getUpLeft().c;
                     int rowExit = BoardState.exitRow;
@@ -160,7 +160,6 @@ public class Validation {
             }
         }
         if (found) {
-            System.out.println("exitRow: " + BoardState.exitRow);
             throw new NullPointerException("There is a block (different orientation with piece) that is too long to exit point");
         }
         return true;
