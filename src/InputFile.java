@@ -2,8 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class InputFile {
@@ -18,6 +20,17 @@ public class InputFile {
 
     public BoardState getBoardState() {
         return boardState;
+    }
+
+    private void addPiecesLocation() {
+        Map<Character, Coordinate> piecesLocation = new HashMap<>();
+        for (Map.Entry<Character, Piece> entry : BoardState.pieces.entrySet()) {
+            char id = entry.getKey();
+            Piece piece = entry.getValue();
+            Coordinate coordinate = piece.getUpLeft();
+            piecesLocation.put(id, coordinate);
+        }
+        boardState.setPiecesLocation(piecesLocation);
     }
 
     private void loadBoardFromFile() {
@@ -57,6 +70,7 @@ public class InputFile {
             BoardState.cols = cols;
             boardState.setBoard(matrix);
             populateBoardState(matrix, rows, cols);
+            addPiecesLocation();
 
         } catch (IOException e) {
             e.printStackTrace();

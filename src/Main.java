@@ -25,6 +25,11 @@ public class Main {
         
         // Get the board state from the input file
         BoardState boardState = inputFile.getBoardState();
+        System.out.println("location of pieces: " + boardState.getPiecesLocation());
+        System.out.println("exit point: " + BoardState.exitRow + ", " + BoardState.exitCol);
+        System.out.println("pieces: " + BoardState.pieces);
+        System.out.println("rows: " + BoardState.rows);
+        System.out.println("cols: " + BoardState.cols);
 
         // Validation
         // hitung waktu unutk menjalankan validasi

@@ -17,6 +17,7 @@ public class BoardState {
     }
 
     public Map<Character, Coordinate> getPiecesLocation(){return this.piecesLocation;}
+    public void setPiecesLocation(Map<Character, Coordinate> piecesLocation){this.piecesLocation = piecesLocation;}
 
     public void setExitPoint(Coordinate c) {
         BoardState.exitRow = c.r;
@@ -56,6 +57,12 @@ public class BoardState {
         if (id == 'P') {
             primaryPiece.setLength(primaryPiece.getLength() + 1);
             primaryPiece.setUpLeft(new Coordinate(r, c));
+            if (pieces.containsKey(id)) {
+                pieces.get(id).addLength(1);
+            } else {
+                pieces.put(id, primaryPiece);
+            }
+
             return true;
         }
         if (pieces.containsKey(id)) {
