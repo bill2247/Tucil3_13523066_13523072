@@ -1,0 +1,148 @@
+-------------RUTE MENUJU SOLUSI-------------
+Papan Awal
+..BBBC 
+..A..C 
+PPA..CK
+...... 
+..DDEE 
+...... 
+
+Gerakan 1: A-d
+..BBBC 
+.....C 
+PPA..CK
+..A... 
+..DDEE 
+...... 
+
+Gerakan 2: C-d
+..BBB. 
+.....C 
+PPA..CK
+..A..C 
+..DDEE 
+...... 
+
+Gerakan 3: B-r
+...BBB 
+.....C 
+PPA..CK
+..A..C 
+..DDEE 
+...... 
+
+Gerakan 4: A-u
+...BBB 
+..A..C 
+PPA..CK
+.....C 
+..DDEE 
+...... 
+
+Gerakan 5: A-u
+..ABBB 
+..A..C 
+PP...CK
+.....C 
+..DDEE 
+...... 
+
+Gerakan 6: P-r
+..ABBB 
+..A..C 
+...PPCK
+.....C 
+..DDEE 
+...... 
+
+Gerakan 7: A-d
+...BBB 
+..A..C 
+..APPCK
+.....C 
+..DDEE 
+...... 
+
+Gerakan 8: B-l
+..BBB. 
+..A..C 
+..APPCK
+.....C 
+..DDEE 
+...... 
+
+Gerakan 9: D-l
+..BBB. 
+..A..C 
+..APPCK
+.....C 
+DD..EE 
+...... 
+
+Gerakan 10: A-d
+..BBB. 
+.....C 
+...PPCK
+.....C 
+DDA.EE 
+..A... 
+
+Gerakan 11: E-l
+..BBB. 
+.....C 
+...PPCK
+.....C 
+DDAEE. 
+..A... 
+
+Gerakan 12: C-d
+..BBB. 
+...... 
+...PPCK
+.....C 
+DDAEEC 
+..A... 
+
+Gerakan 13: B-r
+...BBB 
+...... 
+...PPCK
+.....C 
+DDAEEC 
+..A... 
+
+Gerakan 14: P-l
+...BBB 
+...... 
+.PP..CK
+.....C 
+DDAEEC 
+..A... 
+
+Gerakan 15: P-l
+...BBB 
+...... 
+PP...CK
+.....C 
+DDAEEC 
+..A... 
+
+Gerakan 16: C-d
+...BBB 
+...... 
+PP....K
+.....C 
+DDAEEC 
+..A..C 
+
+Gerakan 17: Primary piece bergerak keluar dari papan!
+...BBB 
+...... 
+......K
+.....C 
+DDAEEC 
+..A..C 
+--------------------------------------------
+Waktu pencarian (ms) : 109
+Banyak node dikunjungi: 1425
+--------------------------------------------

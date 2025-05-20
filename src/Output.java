@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.Scanner;
+import java.io.*;
 
 public class Output {
     private Tree root;
@@ -61,6 +63,7 @@ public class Output {
                 }
                 System.out.println();
             }
+            node.getState().getPiecesLocation().put('P', new Coordinate(-1,-1));
             return;
         }
         System.out.println("Gerakan " + i + ": " + node.getIdMoved() + "-" + node.getMoveType());
@@ -193,5 +196,74 @@ public class Output {
             return newBoard;
         } 
         return board;
+    }
+
+
+    public void writeOutputTxt(String filename, long searchTime, int nodeCount, int algorithmCode){
+        try{
+            FileWriter writer = new FileWriter("test/" + filename.replace(".txt", "-solution-" + algorithmCode +".txt"));
+            writer.write("-------------RUTE MENUJU SOLUSI-------------\n");
+            if (root == null){
+                writer.write("Tidak ditemukan solusi!\n");
+                writer.write("--------------------------------------------\n");
+                writer.write("Waktu pencarian (ms) : " + searchTime + "\n");
+                writer.write("Banyak node dikunjungi: " + nodeCount + "\n");
+                writer.write("--------------------------------------------");
+                writer.close();
+                System.out.println("Solusi berhasil disimpan dalam folder test.");
+                return;
+            }
+            writer.write("Papan Awal\n");
+            char[][] board = root.getState().getBoard();
+            board = addExitPointInBoard(board, new Coordinate(BoardState.exitRow, BoardState.exitCol));
+            for (int i = 0; i < board.length; i++){
+                for (int j = 0; j < board[0].length; j++){
+                    writer.write(board[i][j]);
+                }
+                writer.write("\n");
+            }
+            printBoardHelperTxt(writer, root.getChildren().get(0), 1);
+            writer.write("--------------------------------------------\n");
+            writer.write("Waktu pencarian (ms) : " + searchTime + "\n");
+            writer.write("Banyak node dikunjungi: " + nodeCount + "\n");
+            writer.write("--------------------------------------------");
+            writer.close();
+            System.out.println("Solusi berhasil disimpan dalam folder test.");
+            writer.close();
+        } catch(IOException e){
+            System.out.println("Terjadi error saat penulisan file");
+        }
+    }
+
+    private void printBoardHelperTxt(FileWriter writer, Tree node, int i) throws IOException{
+        if (node == null){
+            return;
+        }
+        
+        Coordinate primaryPieceCurrent = node.getState().getPiecesLocation().get('P');
+        if (primaryPieceCurrent.r == -1 && primaryPieceCurrent.c == -1){
+            node.getState().getPiecesLocation().remove('P');
+            
+            writer.write("\n");
+            writer.write("Gerakan " + i + ": Primary piece bergerak keluar dari papan!\n");
+            char[][] boardString = addExitPointInBoard(node.getState().getBoard(), new Coordinate(BoardState.exitRow, BoardState.exitCol));
+            for (int j = 0; j < boardString.length; j++){
+                for (int k = 0; k < boardString[0].length; k++){
+                    writer.write(boardString[j][k]);
+                }
+                writer.write("\n");
+            }
+            return;
+        }
+        writer.write("\nGerakan " + i + ": " + node.getIdMoved() + "-" + node.getMoveType());
+        writer.write("\n");
+        char[][] boardString = addExitPointInBoard(node.getState().getBoard(), new Coordinate(BoardState.exitRow, BoardState.exitCol));
+        for (int j = 0; j < boardString.length; j++){
+            for (int k = 0; k < boardString[0].length; k++){
+                writer.write(boardString[j][k]);
+            }
+            writer.write("\n");
+        }
+        printBoardHelperTxt(writer, node.getChildren().get(0), i+1);
     }
 }

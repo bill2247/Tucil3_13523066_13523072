@@ -7,7 +7,7 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         while(true){
-            String filePath;
+            String filePath = "";
             boolean isValidatingFile = true;
             BoardState boardState = new BoardState(1,1);
             boardState.resetStatic();
@@ -88,6 +88,7 @@ public class Main {
             System.out.println("Banyak node dikunjungi: " + solver.count);
             System.out.println("--------------------------------------------");
 
+            output.writeOutputTxt(filePath, solveTime, solver.count, algorithmCode);
             System.out.print("Keluar dari program? (y): ");
             String confirm = scanner.nextLine();
             if(confirm.equals("y") || confirm.equals("Y")){

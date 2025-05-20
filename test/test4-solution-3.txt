@@ -1,0 +1,6 @@
+-------------RUTE MENUJU SOLUSI-------------
+Tidak ditemukan solusi!
+--------------------------------------------
+Waktu pencarian (ms) : 1
+Banyak node dikunjungi: 101
+--------------------------------------------

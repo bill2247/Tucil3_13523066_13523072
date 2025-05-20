@@ -1,0 +1,68 @@
+-------------RUTE MENUJU SOLUSI-------------
+Papan Awal
+  K  
+DAAA.
+D..P.
+BC.P.
+BCEEE
+.CFF.
+
+Gerakan 1: B-d
+  K  
+DAAA.
+D..P.
+.C.P.
+BCEEE
+BCFF.
+
+Gerakan 2: C-u
+  K  
+DAAA.
+DC.P.
+.C.P.
+BCEEE
+B.FF.
+
+Gerakan 3: F-l
+  K  
+DAAA.
+DC.P.
+.C.P.
+BCEEE
+BFF..
+
+Gerakan 4: A-r
+  K  
+D.AAA
+DC.P.
+.C.P.
+BCEEE
+BFF..
+
+Gerakan 5: D-d
+  K  
+..AAA
+DC.P.
+DC.P.
+BCEEE
+BFF..
+
+Gerakan 6: A-l
+  K  
+AAA..
+DC.P.
+DC.P.
+BCEEE
+BFF..
+
+Gerakan 7: Primary piece bergerak keluar dari papan!
+  K  
+AAA..
+DC...
+DC...
+BCEEE
+BFF..
+--------------------------------------------
+Waktu pencarian (ms) : 1
+Banyak node dikunjungi: 25
+--------------------------------------------

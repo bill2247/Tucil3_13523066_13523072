@@ -1,0 +1,164 @@
+-------------RUTE MENUJU SOLUSI-------------
+Papan Awal
+AAB..F 
+..BCDF 
+GPPCDFK
+GH.III 
+GHJ... 
+LLJMM. 
+
+Gerakan 1: C-u
+AABC.F 
+..BCDF 
+GPP.DFK
+GH.III 
+GHJ... 
+LLJMM. 
+
+Gerakan 2: P-r
+AABC.F 
+..BCDF 
+G.PPDFK
+GH.III 
+GHJ... 
+LLJMM. 
+
+Gerakan 3: D-u
+AABCDF 
+..BCDF 
+G.PP.FK
+GH.III 
+GHJ... 
+LLJMM. 
+
+Gerakan 4: J-u
+AABCDF 
+..BCDF 
+G.PP.FK
+GHJIII 
+GHJ... 
+LL.MM. 
+
+Gerakan 5: L-r
+AABCDF 
+..BCDF 
+G.PP.FK
+GHJIII 
+GHJ... 
+.LLMM. 
+
+Gerakan 6: P-r
+AABCDF 
+..BCDF 
+G..PPFK
+GHJIII 
+GHJ... 
+.LLMM. 
+
+Gerakan 7: B-d
+AA.CDF 
+..BCDF 
+G.BPPFK
+GHJIII 
+GHJ... 
+.LLMM. 
+
+Gerakan 8: A-r
+.AACDF 
+..BCDF 
+G.BPPFK
+GHJIII 
+GHJ... 
+.LLMM. 
+
+Gerakan 9: L-l
+.AACDF 
+..BCDF 
+G.BPPFK
+GHJIII 
+GHJ... 
+LL.MM. 
+
+Gerakan 10: J-d
+.AACDF 
+..BCDF 
+G.BPPFK
+GH.III 
+GHJ... 
+LLJMM. 
+
+Gerakan 11: I-l
+.AACDF 
+..BCDF 
+G.BPPFK
+GHIII. 
+GHJ... 
+LLJMM. 
+
+Gerakan 12: F-d
+.AACD. 
+..BCD. 
+G.BPP.K
+GHIIIF 
+GHJ..F 
+LLJMMF 
+
+Gerakan 13: P-r
+.AACD. 
+..BCD. 
+G.B.PPK
+GHIIIF 
+GHJ..F 
+LLJMMF 
+
+Gerakan 14: C-d
+.AA.D. 
+..BCD. 
+G.BCPPK
+GHIIIF 
+GHJ..F 
+LLJMMF 
+
+Gerakan 15: A-r
+..AAD. 
+..BCD. 
+G.BCPPK
+GHIIIF 
+GHJ..F 
+LLJMMF 
+
+Gerakan 16: G-u
+..AAD. 
+G.BCD. 
+G.BCPPK
+GHIIIF 
+.HJ..F 
+LLJMMF 
+
+Gerakan 17: G-u
+G.AAD. 
+G.BCD. 
+G.BCPPK
+.HIIIF 
+.HJ..F 
+LLJMMF 
+
+Gerakan 18: H-u
+GHAAD. 
+GHBCD. 
+G.BCPPK
+..IIIF 
+..J..F 
+LLJMMF 
+
+Gerakan 19: Primary piece bergerak keluar dari papan!
+GHAAD. 
+GHBCD. 
+G.BC..K
+..IIIF 
+..J..F 
+LLJMMF 
+--------------------------------------------
+Waktu pencarian (ms) : 85
+Banyak node dikunjungi: 397
+--------------------------------------------
