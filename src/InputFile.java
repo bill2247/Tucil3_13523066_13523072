@@ -62,7 +62,11 @@ public class InputFile {
             // If exit still not found, check last line
             if (!exitFound) {
                 line = reader.readLine();
-                parseBottomExit(line, rows - 1);
+                if (line != null) {
+                    parseBottomExit(line, rows - 1);
+                } else {
+                    throw new IllegalArgumentException("Exit point not found");
+                }
             }
 
             // Finalize board state
@@ -93,7 +97,7 @@ public class InputFile {
         char[] cells = line.toCharArray();
         for (int j = 0; j < cells.length; j++) {
             if (cells[j] == 'K') {
-                boardState.setExitPoint(new Coordinate((j + 1) / 2, 0));
+                boardState.setExitPoint(new Coordinate((j + 1) / 2, -1));
                 return true;
             }
         }
@@ -102,22 +106,21 @@ public class InputFile {
         return false;
     }
 
-    private boolean parseBoardRows(BufferedReader reader, char[][] matrix,
-                                   List<Character> pieceIds, int totalRows, int totalCols, boolean exitAlreadyFound)
-            throws IOException {
+    private boolean parseBoardRows(BufferedReader reader, char[][] matrix, List<Character> pieceIds, int totalRows, int totalCols, boolean exitAlreadyFound)throws IOException {
         boolean exitFound = exitAlreadyFound;
         for (int i = 1; i < totalRows; i++) {
             String line = reader.readLine();
+            System.out.println("line: " + line);
             if (line == null) break;
 
             char[] cells = line.toCharArray();
             // Check side exits
             if (!exitFound) {
                 if (cells[0] == 'K') {
-                    boardState.setExitPoint(new Coordinate(i, 0));
+                    boardState.setExitPoint(new Coordinate(i, -1));
                     exitFound = true;
                 } else if (cells[cells.length - 1] == 'K') {
-                    boardState.setExitPoint(new Coordinate(i, totalCols - 1));
+                    boardState.setExitPoint(new Coordinate(i, totalCols));
                     exitFound = true;
                 }
             }
@@ -146,7 +149,7 @@ public class InputFile {
         char[] cells = line.toCharArray();
         for (int j = 0; j < cells.length; j++) {
             if (cells[j] == 'K') {
-                boardState.setExitPoint(new Coordinate((j + 1) / 2, bottomRow));
+                boardState.setExitPoint(new Coordinate(bottomRow+1, (j + 1) / 2));
                 break;
             }
         }

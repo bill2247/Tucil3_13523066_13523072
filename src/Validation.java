@@ -3,12 +3,10 @@ import java.util.Map;
 public class Validation {
     private BoardState boardState;
     private Piece primaryPiece;
-    private boolean isExitPointHorizontal;
 
     public Validation(BoardState boardState) {
         this.boardState = boardState;
         this.primaryPiece = BoardState.primaryPiece;
-        this.isExitPointHorizontal = BoardState.exitCol == 0 || BoardState.exitCol == BoardState.cols - 1;
     }
     public void validation(){
         validation1();
@@ -23,12 +21,19 @@ public class Validation {
      * Jika vertical → exitRow harus satu kolom dengan piece.
      */
     private boolean validation1() {
+        System.out.println("primary piece orientation: " + primaryPiece.getOrientation());
         if (primaryPiece.getOrientation() == Orientation.HORIZONTAL) {
+            System.out.println("upleft row : " + primaryPiece.getUpLeft().r);
+            System.out.println("exit point row: " + BoardState.exitRow);
             if (primaryPiece.getUpLeft().r != BoardState.exitRow) {
+                System.out.println("primary piece row: " + primaryPiece.getUpLeft().r);
+                System.out.println("exit point row: " + BoardState.exitRow);
                 throw new IllegalStateException("Exit point is not in the same row as the primary piece.");
             }
         } else {
             if (primaryPiece.getUpLeft().c != BoardState.exitCol) {
+                System.out.println("primary piece col: " + primaryPiece.getUpLeft().c);
+                System.out.println("exit point col: " + BoardState.exitRow);
                 throw new IllegalStateException("Exit point is not in the same column as the primary piece.");
             }
         }
@@ -120,7 +125,7 @@ public class Validation {
                 }
             } else {
                 char[][] matrix = boardState.getBoard();
-                for (int i = pry+len+1; i <= ex; i ++){
+                for (int i = pry+len+1; i < ex; i ++){
                     if (matrix[i][prx] == matrix[i-1][prx]){
                         throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point");
                         // return false;
@@ -142,10 +147,11 @@ public class Validation {
                     }
                 }
             } else {
-                char[][] matrix = boardState.getBoard();;
-                for (int i = pry+len+1; i <= ex; i ++){
+                char[][] matrix = boardState.getBoard();
+                for (int i = pry+len+1; i < ex; i ++){
                     if (matrix[i][prx] == matrix[i-1][prx]){
-                        throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point");
+                        System.out.println("prx: " + prx);
+                        throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point" );
                         // return false;
                     }
                 }
@@ -167,13 +173,29 @@ public class Validation {
         } else {
             h = Math.max(BoardState.exitCol, BoardState.cols - BoardState.exitCol);
         }
+        System.out.println("h: " + h);
         
         Map<Character, Piece> pieces = BoardState.pieces;
         for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             Piece piece = entry.getValue();
             if (piece.getOrientation() != orientation) {
-                if (piece.getLength() >= h) {
-                    found = true;
+                if (piece.getLength() > h) {
+                    // apakah piece yang pangjangnya lebih dari h ini berada diatara exit dan primary piece?
+                    int rowPiece = piece.getUpLeft().r;
+                    int colPiece = piece.getUpLeft().c;
+                    int rowExit = BoardState.exitRow;
+                    int colExit = BoardState.exitCol;
+                    int rowPrimary = BoardState.primaryPiece.getUpLeft().r;
+                    int colPrimary = BoardState.primaryPiece.getUpLeft().c;
+                    boolean isBetween = (
+                        (rowPiece >= Math.min(rowExit, rowPrimary) && rowPiece <= Math.max(rowExit, rowPrimary)) ||
+                        (colPiece >= Math.min(colExit, colPrimary) && colPiece <= Math.max(colExit, colPrimary))
+                    );
+                    if (isBetween) {
+                        found = true;
+                        System.out.println("piece id: " + piece.getId());
+                        System.out.println("piece length: " + piece.getLength());
+                    }
                     break;
                 }
             }

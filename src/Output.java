@@ -82,9 +82,10 @@ public class Output {
     }
 
     private char[][] addExitPointInBoard(char[][] board, Coordinate exitPoint){
-        int row = exitPoint.c;
-        int col = exitPoint.r;
-        if (row == 0){
+        int row = exitPoint.r;
+        int col = exitPoint.c;
+        System.out.println("exitPoint: " + row + " " + col);
+        if (row == -1){
             char[][] newBoard = new char[BoardState.rows+1][BoardState.cols];
             for (int i = 0; i < BoardState.cols; i++){
                 newBoard[0][i] = ' ';
@@ -93,8 +94,9 @@ public class Output {
             for (int i = 1; i < BoardState.rows+1; i++){
                 newBoard[i] = board[i-1];
             }
+            printBoard(newBoard);
             return newBoard;
-        } else if (col == 0){
+        } else if (col == -1){
             char[][] newBoard = new char[BoardState.rows][BoardState.cols+1];
             for (int i = 0; i < BoardState.rows; i++){
                 newBoard[i][0] = ' ';
@@ -106,7 +108,7 @@ public class Output {
                 }
             }
             return newBoard;
-        } else if (row == BoardState.rows-1){
+        } else if (row == BoardState.rows){
             char[][] newBoard = new char[BoardState.rows+1][BoardState.cols];
             for (int i = 0; i < BoardState.cols; i++){
                 newBoard[BoardState.rows][i] = ' ';
@@ -116,7 +118,7 @@ public class Output {
                 newBoard[i] = board[i];
             }
             return newBoard;
-        } else if (col == BoardState.cols-1){
+        } else if (col == BoardState.cols){
             char[][] newBoard = new char[BoardState.rows][BoardState.cols+1];
             for (int i = 0; i < BoardState.rows; i++){
                 newBoard[i][BoardState.cols] = ' ';
@@ -130,5 +132,14 @@ public class Output {
             return newBoard;
         } 
         return board;
+    }
+
+    private void printBoard(char[][] board){
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                System.out.print(board[i][j]);
+            }
+            System.out.println();
+        }
     }
 }

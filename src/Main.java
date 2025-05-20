@@ -30,6 +30,7 @@ public class Main {
         System.out.println("pieces: " + BoardState.pieces);
         System.out.println("rows: " + BoardState.rows);
         System.out.println("cols: " + BoardState.cols);
+        System.out.println("primary piece: " + BoardState.primaryPiece.upLeft.r + ", " + BoardState.primaryPiece.upLeft.c);
 
         // Validation
         // hitung waktu unutk menjalankan validasi

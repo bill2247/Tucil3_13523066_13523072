@@ -4,7 +4,7 @@ public class BoardState {
     public static int rows, cols;
     public static Map<Character, Piece> pieces = new HashMap<>();
     public static int exitRow, exitCol;
-    public static Piece primaryPiece = null;
+    public static Piece primaryPiece = new Piece('P', Orientation.HORIZONTAL, 0, null);
     private char[][] board;
     private Map<Character, Coordinate> piecesLocation = new HashMap<>();
     
@@ -22,11 +22,6 @@ public class BoardState {
     public void setExitPoint(Coordinate c) {
         BoardState.exitRow = c.r;
         BoardState.exitCol = c.c;
-        if (BoardState.exitCol == 0 || BoardState.exitCol == cols) {
-            BoardState.primaryPiece = new Piece('P', Orientation.HORIZONTAL, 0, null);
-        } else {
-            BoardState.primaryPiece = new Piece('P', Orientation.VERTICAL, 0, null);
-        }
     }
 
     // public Coordinate getExitPoint() {
@@ -55,12 +50,21 @@ public class BoardState {
         }
         if (id == '.') return true;
         if (id == 'P') {
-            primaryPiece.setLength(primaryPiece.getLength() + 1);
-            primaryPiece.setUpLeft(new Coordinate(r, c));
             if (pieces.containsKey(id)) {
+                if (primaryPiece.getUpLeft().r == r){
+                    primaryPiece.setOrientation(Orientation.HORIZONTAL);
+                } else if (primaryPiece.getUpLeft().c == c) {
+                    primaryPiece.setOrientation(Orientation.VERTICAL);
+                } else {
+                    return false;
+                }
+                // primaryPiece.setLength(primaryPiece.getLength() + 1);
                 pieces.get(id).addLength(1);
+                System.out.println("len added: " + primaryPiece.getLength());
             } else {
                 pieces.put(id, primaryPiece);
+                primaryPiece.setUpLeft(new Coordinate(r, c));
+                pieces.get(id).addLength(1);
             }
 
             return true;
