@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -56,9 +57,70 @@ public class Main {
         
         // Print the initial state of the tree
         System.out.println("Initial Tree State:");
-        System.out.println(tree.getState());
-        // output
-        Output output = new Output(tree);
+        char[][] board = boardState.getBoard();
+        for(int i=0;i<BoardState.rows;i++){
+            for(int j=0;j<BoardState.cols;j++){
+                System.out.print(board[i][j]);
+            }    
+            System.out.println();
+        }
+        System.out.println("pieces ");
+        for (Map.Entry<Character, Piece> entry : BoardState.pieces.entrySet()) {
+            System.out.println("  " + entry.getKey() + ": " + entry.getValue().getLength());
+        }
+
+        Cost cost = new Cost(3, tree.getState());
+        Solver solver = new Solver();
+        
+        Tree goal = solver.solve(tree);
+        System.out.println("kusanagi");
+        System.out.println("Node  : " + goal);
+        System.out.println("Parent: " + goal.getParent());
+        goal.getState().printGameState(); // debug
+
+        // Tree path = solver.generatePath(goal);
+
+        // ------------------------ res ------------------------
+        ArrayList<Tree> path = new ArrayList<>();
+        Tree current = goal;
+        while(current != null){
+            path.add(current);
+            current=current.getParent();
+        }
+        Collections.reverse(path);
+
+        for(int i=0;i<path.size()-1;i++){
+            ArrayList<Tree> child = new ArrayList<>();
+            child.add(path.get(i+1));
+            path.get(i).setChildren(child);
+        }
+        ArrayList<Tree> nochild = new ArrayList<>();
+        path.get(path.size()-1).setChildren(nochild);
+        
+        Tree res = path.get(0);
+
+        System.out.println("kusanagi3");
+        System.out.println("Node  : " + res);
+        System.out.println("Parent: " + res.getParent());
+        res.getState().printGameState(); // debug
+
+        Tree currentNode = res;
+        Scanner scanner = new Scanner(System.in);
+        while(currentNode.getChildren().size()>0){
+            System.out.println("---------------------");
+            currentNode.getState().printGameState();
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^");
+            String name = scanner.nextLine(); // debug
+            currentNode = currentNode.getChildren().get(0);
+        }
+        System.out.println("---------------------");
+        currentNode.getState().printGameState();
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^");
+       
+        // System.exit(0);
+        // // output
+        System.out.println("--------------------------");
+        Output output = new Output(res);
         output.printBoard();
     }
 }

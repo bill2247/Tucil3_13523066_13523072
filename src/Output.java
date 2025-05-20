@@ -1,29 +1,66 @@
+import java.util.*;
+
 public class Output {
     private Tree root;
+    private char exitPosition; // 'u' 'd' 'l' 'r'
     public static final String RESET = "\u001B[0m";
     public static final String RED = "\u001B[31m";
     public static final String GREEN = "\u001B[32m";
     public static final String NAVY = "\u001B[34m";
     public static final String YELLOW_BG = "\u001B[43m";
 
-
+    
     public Output(Tree root){
         this.root = root;
+        this.exitPosition = setExitPosition();
+    }
+
+    private char setExitPosition(){
+        int row = BoardState.exitRow;
+        int col = BoardState.exitCol;
+        if (row == -1){
+            return 'u';
+        } else if (row == BoardState.rows){
+            return 'd';
+        } else if (col == -1){
+            return 'l';
+        } else if (col == BoardState.cols){
+            return 'r';
+        }
+        return ' ';
     }
 
     public void printBoard(){
-        printBoardHelper(root, 0);
+        if (root.getParent() == null){
+            printRootNode(root);
+        } else {
+            System.out.println("Papan Awal");
+        }
+        printBoardHelper(root.getChildren().get(0), 1);
     }
 
     private void printBoardHelper(Tree node, int i){
         if (node == null){
             return;
         }
-        if (i == 0){
-            System.out.println("Papan Awal");
-        } else {
-            System.out.println("Gerakan " + i + ": " + node.getIdMoved() + "-" + node.getMoveType());
+        System.out.println("coordinat primary piece: " + node.getState().getPiecesLocation().get('P').r + " " + node.getState().getPiecesLocation().get('P').c);
+        Coordinate primaryPieceCurrent = node.getState().getPiecesLocation().get('P');
+        if (primaryPieceCurrent.r == -1 && primaryPieceCurrent.c == -1){
+            node.getState().getPiecesLocation().remove('P');
+            // System.out.println("coordinat primary piece 2: " + node.getState().getPiecesLocation().get('P').r + " " + node.getState().getPiecesLocation().get('P').c);
+
+            
+            char[][] boardString = addExitPointInBoard(node.getState().getBoard(), new Coordinate(BoardState.exitRow, BoardState.exitCol));
+            for (int j = 0; j < boardString.length; j++){
+                for (int k = 0; k < boardString[0].length; k++){
+                    System.out.print(boardString[j][k]);
+                }
+                System.out.println();
+            }
+            System.out.println("Papan Akhir");
+            return;
         }
+        System.out.println("Gerakan " + i + ": " + node.getIdMoved() + "-" + node.getMoveType());
         String[][] boardString = boardCharToString(node);
         for (int j = 0; j < boardString.length; j++){
             for (int k = 0; k < boardString[0].length; k++){
@@ -50,35 +87,59 @@ public class Output {
             }
         }
         char idMoved = node.getIdMoved();
-        Piece piece = BoardState.pieces.get(idMoved);
+        System.out.println("id moved: " + idMoved);
+        Coordinate piece = node.getState().getPiecesLocation().get(idMoved);
+        int length = BoardState.pieces.get(idMoved).getLength();
+        System.out.println("length: " + length);
         char moveType = node.getMoveType();
         int steps = node.getSteps();
+        if (exitPosition == 'l'){
+            piece.c = piece.c + 1;
+        }
+        if (exitPosition == 'u'){
+            piece.r = piece.r + 1;
+        }
         if (moveType == 'u'){
-            int start = piece.upLeft.r;
-            int end = piece.upLeft.r + steps + piece.length - 1;
+            int start = piece.r;
+            int end = piece.r + steps + length - 1;
             for (int i = start; i <= end; i++){
-                boardString[i][piece.upLeft.c] = NAVY + YELLOW_BG + boardString[i][piece.upLeft.c] + RESET;
+                boardString[i][piece.c] = NAVY + YELLOW_BG + boardString[i][piece.c] + RESET;
             }
         } else if (moveType == 'd'){
-            int start = piece.upLeft.r - steps;
-            int end = piece.upLeft.r + piece.length - 1;
+            int start = piece.r - steps;
+            int end = piece.r + length - 1;
             for (int i = start; i <= end; i++){
-                boardString[i][piece.upLeft.c] = NAVY + YELLOW_BG + boardString[i][piece.upLeft.c] + RESET;
+                boardString[i][piece.c] = NAVY + YELLOW_BG + boardString[i][piece.c] + RESET;
             }
         } else if (moveType == 'l'){
-            int start = piece.upLeft.c;
-            int end = piece.upLeft.c + steps + piece.length - 1;
+            int start = piece.c;
+            int end = piece.c + steps + length - 1;
             for (int i = start; i <= end; i++){
-                boardString[piece.upLeft.r][i] = NAVY + YELLOW_BG + boardString[piece.upLeft.r][i] + RESET;
+                boardString[piece.r][i] = NAVY + YELLOW_BG + boardString[piece.r][i] + RESET;
             }
         } else if (moveType == 'r'){
-            int start = piece.upLeft.c - steps;
-            int end = piece.upLeft.c + piece.length - 1;
+            System.out.println("piece.c: " + piece.c);
+            int start = piece.c - steps;
+            int end = piece.c + length - 1;
             for (int i = start; i <= end; i++){
-                boardString[piece.upLeft.r][i] = NAVY + YELLOW_BG + boardString[piece.upLeft.r][i] + RESET;
+                boardString[piece.r][i] = NAVY + YELLOW_BG + boardString[piece.r][i] + RESET;
             }
         }
         return boardString;
+    }
+
+    private void printRootNode(Tree node){
+        if (node.getParent() == null){
+            System.out.println("Papan Awal");
+            char[][] board = node.getState().getBoard();
+            board = addExitPointInBoard(board, new Coordinate(BoardState.exitRow, BoardState.exitCol));
+            for (int i = 0; i < board.length; i++){
+                for (int j = 0; j < board[0].length; j++){
+                    System.out.print(board[i][j]);
+                }
+                System.out.println();
+            }
+        }
     }
 
     private char[][] addExitPointInBoard(char[][] board, Coordinate exitPoint){
