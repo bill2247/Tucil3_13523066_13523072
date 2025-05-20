@@ -108,7 +108,7 @@ public class Cost {
     }
 
     public static int h(BoardState state){
-        int res = 0;
+        int res = 1;
         Piece primPiece = BoardState.pieces.get('P');
         Coordinate primCoor = new Coordinate();
         if (state.getPiecesLocation().containsKey('P')){
