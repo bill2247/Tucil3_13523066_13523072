@@ -5,8 +5,7 @@ public class BoardState {
     public static Map<Character, Piece> pieces = new HashMap<>();
     public static int exitRow, exitCol;
     public static Piece primaryPiece = null;
-    private List<char[]> board = new ArrayList<>();
-    // add: map of character to top-left-index's coordinate, non static
+    private char[][] board;
     public Map<Character, Coordinate> piecesLocation = new HashMap<>();
     
     public static Map<Integer, ArrayList<Integer>> idealHPieceCoordinates; // lokasi ideal piece horizontal
@@ -18,8 +17,8 @@ public class BoardState {
     }
 
     public void setExitPoint(Coordinate c) {
-        BoardState.exitRow = c.x;
-        BoardState.exitCol = c.y;
+        BoardState.exitRow = c.r;
+        BoardState.exitCol = c.c;
         if (BoardState.exitCol == 0 || BoardState.exitCol == cols) {
             BoardState.primaryPiece = new Piece('P', Orientation.HORIZONTAL, 0, null);
         } else {
@@ -33,13 +32,15 @@ public class BoardState {
 
     public BoardState cloneBoardState(){
         BoardState newState = new BoardState(rows, cols);
-        for(char[] row : this.board){
-            newState.board.add(Arrays.copyOf(row, row.length));
+        newState.board = new char[rows][];
+        for(int i=0;i<rows;i++){
+            newState.board[i] = board[i].clone();
         }
+
         for(Map.Entry<Character, Coordinate> entry : this.piecesLocation.entrySet()){
             Character id = entry.getKey();
             Coordinate coor = entry.getValue();
-            newState.piecesLocation.put(id, new Coordinate(coor.x, coor.y));
+            newState.piecesLocation.put(id, new Coordinate(coor.r, coor.c));
         }
 
         return newState;
@@ -58,9 +59,9 @@ public class BoardState {
         if (pieces.containsKey(id)) {
             pieces.get(id).addLength(1);
             Coordinate p = pieces.get(id).getUpLeft();
-            if (r == p.x){
+            if (r == p.r){
                 pieces.get(id).setOrientation(Orientation.HORIZONTAL);
-            } else if (c == p.y) {
+            } else if (c == p.c) {
                 pieces.get(id).setOrientation(Orientation.VERTICAL);
             } else {
                 return false;
@@ -75,30 +76,27 @@ public class BoardState {
 
     public void setBoard(char[][] board) {
         for (int i = 0; i < rows; i++) {
-            this.board.add(board[i]);
+            this.board[i] = board[i].clone();
         }
     }
+
     public char[][] getBoard() {
-        char[][] boardArray = new char[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            boardArray[i] = this.board.get(i);
-        }
-        return boardArray;
+        return board;
     }
 
     public void addPiece(char id, int r, int c){
         // menambahkan piece ke papan diberikan id dan lokasi kiri-atas nya
-        if(board.get(r)[c] == '.' || (r==-1 && c==-1)){
+        if(board[r][c] == '.' || (r==-1 && c==-1)){
             return;
         }
         Piece currentPiece = pieces.get(id);
         if(currentPiece.getOrientation() == Orientation.HORIZONTAL){
             for(int i=0;i<currentPiece.getLength();i++){
-                board.get(r)[c+i] = id;
+                board[r][c+i] = id;
             }
         } else{
             for(int i=0;i<currentPiece.getLength();i++){
-                board.get(r+i)[c] = id;
+                board[r+i][c] = id;
             }
         }
         Coordinate currentCoordinate = new Coordinate(r, c);
@@ -112,15 +110,15 @@ public class BoardState {
         }
         Coordinate currentCoordinate = piecesLocation.get(id);
         Piece currentPiece = pieces.get(id);
-        int r = currentCoordinate.y;
-        int c = currentCoordinate.x;
+        int r = currentCoordinate.r;
+        int c = currentCoordinate.c;
         if(currentPiece.getOrientation() == Orientation.HORIZONTAL){
             for(int i=0;i<currentPiece.getLength();i++){
-                board.get(r)[c+i] = '.';
+                board[r][c+i] = '.';
             }
         } else{
             for(int i=0;i<currentPiece.getLength();i++){
-                board.get(r+i)[c] = '.';
+                board[r+i][c] = '.';
             }
         }
         piecesLocation.remove(id);
@@ -139,13 +137,13 @@ public class BoardState {
             char currId = entry.getKey();
             Piece currPiece = pieces.get(currId);
             Coordinate currCoordinate = piecesLocation.get(currId);
-            int r = currCoordinate.y;
-            int c = currCoordinate.x;
+            int r = currCoordinate.r;
+            int c = currCoordinate.c;
             int i;
             if(currPiece.getOrientation() == Orientation.HORIZONTAL){
                 // cek legal move sebelah kiri
                 for(i=0;c-1-i>=0;i++){
-                    char checkId = board.get(r)[c-1-i];
+                    char checkId = board[r][c-1-i];
                     if(checkId!='.'){break;}
                     Coordinate checkCoordinate = new Coordinate(c-1-i, r);
                     addMove(res, currId, checkCoordinate);
@@ -155,7 +153,7 @@ public class BoardState {
                 }
                 // cek legal move sebelah kanan
                 for(i=0;c+currPiece.getLength()+i<cols;i++){
-                    char checkId = board.get(r)[c+currPiece.getLength()+i];
+                    char checkId = board[r][c+currPiece.getLength()+i];
                     if(checkId!='.'){break;}
                     Coordinate checkCoordinate = new Coordinate(c+currPiece.getLength()+i, r);
                     addMove(res, currId, checkCoordinate);
@@ -166,7 +164,7 @@ public class BoardState {
             } else{
                 // cek legal move sebelah atas
                 for(i=0;r-1-i>=0;i++){
-                    char checkId = board.get(r-1-i)[c];
+                    char checkId = board[r-1-i][c];
                     if(checkId!='.'){break;}
                     Coordinate checkCoordinate = new Coordinate(c, r-1-i);
                     addMove(res, currId, checkCoordinate);
@@ -176,7 +174,7 @@ public class BoardState {
                 }
                 // cek legal move sebelah bawah
                 for(i=0;r+currPiece.getLength()+i<rows;i++){
-                    char checkId = board.get(r+currPiece.getLength()+i)[c];
+                    char checkId = board[r+currPiece.getLength()+i][c];
                     if(checkId!='.'){break;}
                     Coordinate checkCoordinate = new Coordinate(c, r+currPiece.getLength()+i);
                     addMove(res, currId, checkCoordinate);
@@ -189,9 +187,7 @@ public class BoardState {
 
         return res;
     }
-    // public ArrayList<Map<Piece, Coordinate>> generateLegalMoves(){
-    // ongoing, ghif
-    // }
+    
     public void printAllPieces() {
         for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             entry.getValue().printPiece();

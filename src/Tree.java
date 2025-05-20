@@ -38,14 +38,14 @@ public class Tree {
             ArrayList<Coordinate> currCoordinates = entry.getValue();
 
             for(int i=0;i<currCoordinates.size();i++){
-                int r = currCoordinates.get(i).y;
-                int c = currCoordinates.get(i).x;
+                int r = currCoordinates.get(i).c;
+                int c = currCoordinates.get(i).r;
                 BoardState newState = state.cloneBoardState();
 
                 // cek tipe gerakan
                 char mt = ' ';
-                int oldR = state.piecesLocation.get(currId).y;
-                int oldC = state.piecesLocation.get(currId).x;
+                int oldR = state.piecesLocation.get(currId).c;
+                int oldC = state.piecesLocation.get(currId).r;
                 if(r>oldR){mt = 'd';}
                 else if(r<oldR){mt = 'u';}
                 else if(c<oldC){mt = 'l';}

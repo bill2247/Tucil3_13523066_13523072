@@ -36,17 +36,17 @@ public class Cost {
                     Coordinate coor2 = piecesLocationBefore.get(id1);
                     int len2 = piece2.getLength();
                     if (piece2.getOrientation() == Orientation.HORIZONTAL){
-                        int coor1y = coor1.y;
+                        int coor1y = coor1.c;
                         for (int i = 0; i < len2; i++){
-                            int coor2y = coor2.y + i;
+                            int coor2y = coor2.c + i;
                             if (coor1y == coor2y){
                                 GnBefore++;
                             }
                         }
                     } else {
-                        int coor1x = coor1.x;
+                        int coor1x = coor1.r;
                         for (int i = 0; i < len2; i++){
-                            int coor2x = coor2.x + i;
+                            int coor2x = coor2.r + i;
                             if (coor1x == coor2x){
                                 GnBefore++;
                             }
@@ -63,17 +63,17 @@ public class Cost {
                     Coordinate coor2 = piecesLocationAfter.get(id1);
                     int len2 = piece2.getLength();
                     if (piece2.getOrientation() == Orientation.HORIZONTAL){
-                        int coor1y = coor1.y;
+                        int coor1y = coor1.c;
                         for (int i = 0; i < len2; i++){
-                            int coor2y = coor2.y + i;
+                            int coor2y = coor2.c + i;
                             if (coor1y == coor2y){
                                 GnAfter++;
                             }
                         }
                     } else {
-                        int coor1x = coor1.x;
+                        int coor1x = coor1.r;
                         for (int i = 0; i < len2; i++){
-                            int coor2x = coor2.x + i;
+                            int coor2x = coor2.r + i;
                             if (coor1x == coor2x){
                                 GnAfter++;
                             }
@@ -97,37 +97,37 @@ public class Cost {
         } else{
             return 0;
         }
-        if(primCoor.x==-1 && primCoor.y==-1){
+        if(primCoor.r==-1 && primCoor.c==-1){
             return 0;
         }
 
         if(primPiece.getOrientation() == Orientation.HORIZONTAL){
-            if(primCoor.x < BoardState.exitCol){ // exit di sebelah kanan
-                for(int i=0;primCoor.x+primPiece.getLength()+i<BoardState.cols;i++){
-                    char checkId = state.board.get(primCoor.y)[primCoor.x+primPiece.getLength()+i];
+            if(primCoor.c < BoardState.exitCol){ // exit di sebelah kanan
+                for(int i=0;primCoor.c+primPiece.getLength()+i<BoardState.cols;i++){
+                    char checkId = state.getBoard()[primCoor.r][primCoor.c+primPiece.getLength()+i];
                     if(checkId!='.'){
                         res++;
                     }
                 }
-            } else if(primCoor.x > BoardState.exitCol){ // exit di sebelah kiri
-                for(int i=0;primCoor.x-1-i>=0;i++){
-                    char checkId = state.board.get(primCoor.y)[primCoor.x-1-i];
+            } else if(primCoor.c > BoardState.exitCol){ // exit di sebelah kiri
+                for(int i=0;primCoor.c-1-i>=0;i++){
+                    char checkId = state.getBoard()[primCoor.r][primCoor.c-1-i];
                     if(checkId!='.'){
                         res++;
                     }
                 }
             }
         } else{
-            if(primCoor.y < BoardState.exitRow){ // exit di sebelah atas
-                for(int i=0;primCoor.y-1-i>=0;i++){
-                    char checkId = state.board.get(primCoor.y-1-i)[primCoor.x];
+            if(primCoor.r < BoardState.exitRow){ // exit di sebelah atas
+                for(int i=0;primCoor.r-1-i>=0;i++){
+                    char checkId = state.getBoard()[primCoor.r-1-i][primCoor.c];
                     if(checkId!='.'){
                         res++;
                     }
                 }
-            } else if(primCoor.y > BoardState.exitRow){ // exit di sebelah bawah
-                for(int i=0;primCoor.y+primPiece.getLength()+i<BoardState.rows;i++){
-                    char checkId = state.board.get(primCoor.y+primPiece.getLength()+i)[primCoor.x];
+            } else if(primCoor.r > BoardState.exitRow){ // exit di sebelah bawah
+                for(int i=0;primCoor.r+primPiece.getLength()+i<BoardState.rows;i++){
+                    char checkId = state.getBoard()[primCoor.r+primPiece.getLength()+i][primCoor.c];
                     if(checkId!='.'){
                         res++;
                     }
