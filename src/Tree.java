@@ -14,7 +14,7 @@ public class Tree implements Comparable<Tree>{
         this.state = state;
         this.children = new ArrayList<Tree>();
         this.moveType = ' ';
-        this.fn = 0;
+        this.fn = Cost.f(state);
         this.parent = null;
     }
 

@@ -207,4 +207,31 @@ public class BoardState {
             entry.getValue().printPiece();
         }
     }
+
+    public void printGameState() {
+        System.out.println("Rows: " + rows);
+        System.out.println("Cols: " + cols);
+        System.out.println("Exit Row: " + exitRow);
+        System.out.println("Exit Col: " + exitCol);
+
+        System.out.println("Primary Piece: " + (primaryPiece != null ? primaryPiece : "null"));
+
+        System.out.println("\nPieces:");
+        for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+            System.out.println("  " + entry.getKey() + ": " + entry.getValue());
+        }
+
+        System.out.println("\nPieces Location:");
+        for (Map.Entry<Character, Coordinate> entry : piecesLocation.entrySet()) {
+            System.out.println("  " + entry.getKey() + ": " + entry.getValue());
+        }
+
+        System.out.println("\nBoard:");
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 }

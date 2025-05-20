@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -60,9 +61,21 @@ public class Main {
         
         // Print the initial state of the tree
         System.out.println("Initial Tree State:");
-        System.out.println(tree.getState());
-        // output
-        Output output = new Output(tree);
-        output.printBoard();
+        char[][] board = boardState.getBoard();
+        for(int i=0;i<BoardState.rows;i++){
+            for(int j=0;j<BoardState.cols;j++){
+                System.out.print(board[i][j]);
+            }    
+            System.out.println();
+        }
+
+        Cost cost = new Cost(1, tree.getState());
+        Solver solver = new Solver();
+        
+        Tree goal = solver.solve(tree);
+        // ArrayList<Tree> path = solver.generatePath(goal);
+        // // output
+        // Output output = new Output(tree);
+        // output.printBoard();
     }
 }
