@@ -43,13 +43,13 @@ public class Output {
         if (node == null){
             return;
         }
-        System.out.println("coordinat primary piece: " + node.getState().getPiecesLocation().get('P').r + " " + node.getState().getPiecesLocation().get('P').c);
+        
         Coordinate primaryPieceCurrent = node.getState().getPiecesLocation().get('P');
         if (primaryPieceCurrent.r == -1 && primaryPieceCurrent.c == -1){
             node.getState().getPiecesLocation().remove('P');
-            // System.out.println("coordinat primary piece 2: " + node.getState().getPiecesLocation().get('P').r + " " + node.getState().getPiecesLocation().get('P').c);
-
             
+            System.out.println();
+            System.out.println("Gerakan " + i + ": Primary piece bergerak keluar dari papan!");
             char[][] boardString = addExitPointInBoard(node.getState().getBoard(), new Coordinate(BoardState.exitRow, BoardState.exitCol));
             for (int j = 0; j < boardString.length; j++){
                 for (int k = 0; k < boardString[0].length; k++){
@@ -57,7 +57,6 @@ public class Output {
                 }
                 System.out.println();
             }
-            System.out.println("Papan Akhir");
             return;
         }
         System.out.println("Gerakan " + i + ": " + node.getIdMoved() + "-" + node.getMoveType());
@@ -87,10 +86,10 @@ public class Output {
             }
         }
         char idMoved = node.getIdMoved();
-        System.out.println("id moved: " + idMoved);
+        // System.out.println("id moved: " + idMoved);
         Coordinate piece = node.getState().getPiecesLocation().get(idMoved);
         int length = BoardState.pieces.get(idMoved).getLength();
-        System.out.println("length: " + length);
+        // System.out.println("length: " + length);
         char moveType = node.getMoveType();
         int steps = node.getSteps();
         if (exitPosition == 'l'){
@@ -125,6 +124,7 @@ public class Output {
                 boardString[piece.r][i] = NAVY + YELLOW_BG + boardString[piece.r][i] + RESET;
             }
         }
+        System.out.println();
         return boardString;
     }
 
@@ -145,7 +145,7 @@ public class Output {
     private char[][] addExitPointInBoard(char[][] board, Coordinate exitPoint){
         int row = exitPoint.r;
         int col = exitPoint.c;
-        System.out.println("exitPoint: " + row + " " + col);
+        // System.out.println("exitPoint: " + row + " " + col);
         if (row == -1){
             char[][] newBoard = new char[BoardState.rows+1][BoardState.cols];
             for (int i = 0; i < BoardState.cols; i++){

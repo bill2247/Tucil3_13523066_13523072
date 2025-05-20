@@ -7,13 +7,15 @@ public class BoardState {
     public static Piece primaryPiece = new Piece('P', Orientation.HORIZONTAL, 0, null);
     private char[][] board;
     private Map<Character, Coordinate> piecesLocation = new HashMap<>();
-    
-    public static Map<Integer, ArrayList<Integer>> idealHPieceCoordinates; // lokasi ideal piece horizontal
-    public static Map<Integer, ArrayList<Integer>> idealVPieceCoordinates; // lokasi ideal piece vertikal
 
     public BoardState(int rows, int cols) {
         BoardState.rows = rows;
         BoardState.cols = cols;
+    }
+    
+    public void resetStatic(){
+        pieces = new HashMap<>();
+        primaryPiece = new Piece('P', Orientation.HORIZONTAL, 0, null);
     }
 
     public Map<Character, Coordinate> getPiecesLocation(){return this.piecesLocation;}

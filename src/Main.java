@@ -3,124 +3,90 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        // Create an instance of InputFile
-        // input user input file
-        // System.out.print("Please enter the input file path: ");
-        // Scanner scanner = new Scanner(System.in);
-        // String filePath ;
-        // while(true) {
-        //     filePath = scanner.nextLine();
-        //     if (filePath.equals("exit")) {
-        //         System.out.println("Exiting...");
-        //         return;
-        //     }
-        //     if (filePath.endsWith(".txt")) {
-        //         break;
-        //     } else {
-        //         System.out.print("Invalid file path. Please enter a valid .txt file path: ");
-        //     }
-        // }
-        // scanner.close();
-        String filePath = "input.txt";
-        InputFile inputFile = new InputFile("test/" + filePath);
-        
-        // Get the board state from the input file
-        BoardState boardState = inputFile.getBoardState();
-        System.out.println("(main) exit point: " + BoardState.exitRow + ", " + BoardState.exitCol);
-        System.out.println("(main) primary piece: " + BoardState.primaryPiece.upLeft.r + ", " + BoardState.primaryPiece.upLeft.c);
+        System.out.println("Selamat datang di program Rush Hour Puzzle Solver!");
 
-        // Validation
-        // hitung waktu unutk menjalankan validasi
-        long startTime = System.currentTimeMillis();
-        Validation val = new Validation(boardState);
-        try {
-            val.validation();
-        } catch (IllegalStateException e) {
-            System.out.println("Validation Error: " + e.getMessage());
-            return;
-        }
-        long endTime = System.currentTimeMillis();
-        System.out.println("Validation Time: " + (endTime - startTime) + " ms");
-        
-        // Print the board state
-        System.out.println("Board State:");
-        for (char[] row : boardState.getBoard()) {
-            System.out.println(row);
-        }
-
-        // Print the pieces
-        // System.out.println("Pieces:");
-        // boardState.printAllPieces();
-        
-        // Create a tree with the initial board state
-        Tree tree = new Tree(boardState);
-        
-        // Print the initial state of the tree
-        System.out.println("Initial Tree State:");
-        char[][] board = boardState.getBoard();
-        for(int i=0;i<BoardState.rows;i++){
-            for(int j=0;j<BoardState.cols;j++){
-                System.out.print(board[i][j]);
-            }    
-            System.out.println();
-        }
-        System.out.println("pieces ");
-        for (Map.Entry<Character, Piece> entry : BoardState.pieces.entrySet()) {
-            System.out.println("  " + entry.getKey() + ": " + entry.getValue().getLength());
-        }
-
-        Cost cost = new Cost(3, tree.getState());
-        Solver solver = new Solver();
-        
-        Tree goal = solver.solve(tree);
-        System.out.println("kusanagi");
-        System.out.println("Node  : " + goal);
-        System.out.println("Parent: " + goal.getParent());
-        goal.getState().printGameState(); // debug
-
-        // Tree path = solver.generatePath(goal);
-
-        // ------------------------ res ------------------------
-        ArrayList<Tree> path = new ArrayList<>();
-        Tree current = goal;
-        while(current != null){
-            path.add(current);
-            current=current.getParent();
-        }
-        Collections.reverse(path);
-
-        for(int i=0;i<path.size()-1;i++){
-            ArrayList<Tree> child = new ArrayList<>();
-            child.add(path.get(i+1));
-            path.get(i).setChildren(child);
-        }
-        ArrayList<Tree> nochild = new ArrayList<>();
-        path.get(path.size()-1).setChildren(nochild);
-        
-        Tree res = path.get(0);
-
-        System.out.println("kusanagi3");
-        System.out.println("Node  : " + res);
-        System.out.println("Parent: " + res.getParent());
-        res.getState().printGameState(); // debug
-
-        Tree currentNode = res;
         Scanner scanner = new Scanner(System.in);
-        while(currentNode.getChildren().size()>0){
-            System.out.println("---------------------");
-            currentNode.getState().printGameState();
-            System.out.println("^^^^^^^^^^^^^^^^^^^^^");
-            String name = scanner.nextLine(); // debug
-            currentNode = currentNode.getChildren().get(0);
+        while(true){
+            String filePath;
+            boolean isValidatingFile = true;
+            BoardState boardState = new BoardState(1,1);
+            boardState.resetStatic();
+            while(isValidatingFile){
+                System.out.print("Nama File Input: ");
+                filePath = scanner.nextLine();
+                if (filePath.equals("exit")) {
+                    System.out.println("Keluar dari program...");
+                    return;
+                }
+                if (filePath.endsWith(".txt")) {
+                    try {
+                        InputFile inputFile = new InputFile("test/" + filePath);
+                        boardState = inputFile.getBoardState();
+                        Validation val = new Validation(boardState);
+                        val.validation();
+                    } catch (Exception e) {
+                        System.out.println("^Ditemukan kesalahan pada file: " + e.getMessage());
+                        continue;
+                    }
+                    isValidatingFile = false;
+                } else {
+                    System.out.println("File tidak valid. Silakan masukan kembali file *.txt");
+                }
+            }
+            System.out.println("-----ALGORITMA PENCARIAN-----");
+            System.out.println("1. Uniform Cost Search (UCS)");
+            System.out.println("2. Greedy Best First Search");
+            System.out.println("3. A*");
+            System.out.println("-----------------------------");
+
+            int algorithmCode = 0;
+            boolean isValidatingCode = true;
+            while(isValidatingCode){
+                System.out.print("Algoritma Pencarian (1-3): ");
+                String input = scanner.nextLine();
+                try{
+                    algorithmCode = Integer.parseInt(input);
+                    if(algorithmCode<1 || algorithmCode>3){
+                       System.out.println("Harap masukkan angka 1-3");
+                       continue;
+                    }
+                } catch(NumberFormatException e){
+                    System.out.println("Harap masukkan angka 1-3");
+                    continue;
+                }
+                isValidatingCode = false;
+            }
+
+            // Pencarian Solusi
+            // Root node, kondisi awal
+            Tree tree = new Tree(boardState);
+            Cost cost = new Cost(algorithmCode, tree.getState());
+            Solver solver = new Solver();
+        
+            System.out.println("Mencari solusi...");
+            long startTimeSolve = System.currentTimeMillis();
+            Tree goal = solver.solve(tree);
+            long endTimeSolve = System.currentTimeMillis();
+            long solveTime = endTimeSolve - startTimeSolve;
+
+            // output
+            Tree path = Solver.generatePath(goal);
+            Output output = new Output(path);
+            
+            System.out.println("-------------RUTE MENUJU SOLUSI-------------");
+            output.printBoard();
+            System.out.println();
+            System.out.println("--------------------------------------------");
+            System.out.println("Waktu pencarian (ms) : " + solveTime);
+            System.out.println("Banyak node dikunjungi: " + solver.count);
+            System.out.println("--------------------------------------------");
+
+            System.out.print("Keluar dari program? (y): ");
+            String confirm = scanner.nextLine();
+            if(confirm.equals("y") || confirm.equals("Y")){
+                System.out.println("Sampai jumpa kembali!");
+                System.exit(0);
+            }
         }
-        System.out.println("---------------------");
-        currentNode.getState().printGameState();
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^");
-       
-        // System.exit(0);
-        // // output
-        System.out.println("--------------------------");
-        Output output = new Output(res);
-        output.printBoard();
     }
 }

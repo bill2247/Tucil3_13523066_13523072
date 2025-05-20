@@ -3,25 +3,20 @@ import java.util.*;
 
 public class Solver {
     public int algorithm; // 1. UCS, 2.GBFS, 3.A*
+    public int count;
 
     public Tree solve(Tree t){
         PriorityQueue<Tree> pq = new PriorityQueue<>();
         Set<BoardState> visited = new HashSet<>();
 
         pq.add(t);
-        // Scanner scanner = new Scanner(System.in);  // debug
+        count = 0;
         while(pq.isEmpty()==false){
+            count++;
             Tree currentNode = pq.poll();
             if(currentNode.isGoal()){
-                System.out.println("Node  : " + currentNode);
-                System.out.println("Parent: " + currentNode.getParent());
-                currentNode.getState().printGameState(); // debug
                 return currentNode;
             }
-            System.out.println("Node  : " + currentNode);
-            System.out.println("Parent: " + currentNode.getParent());
-            currentNode.getState().printGameState(); // debug
-            // String name = scanner.nextLine(); // debug
 
             visited.add(currentNode.getState());
             currentNode.generateChildren();
@@ -36,12 +31,6 @@ public class Solver {
     }
 
     public static Tree generatePath(Tree goalNode){
-        System.out.println("kusanagi2");
-        System.out.println("Node  : " + goalNode);
-        System.out.println("Parent: " + goalNode.getParent());
-        goalNode.getState().printGameState(); // debug
-
-
         ArrayList<Tree> path = new ArrayList<>();
         Tree current = goalNode;
         while(current != null){
