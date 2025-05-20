@@ -109,7 +109,6 @@ public class Cost {
         if(primCoor.r==-1 && primCoor.c==-1){
             return 0;
         }
-
         if(primPiece.getOrientation() == Orientation.HORIZONTAL){
             if(primCoor.c < BoardState.exitCol){ // exit di sebelah kanan
                 for(int i=0;primCoor.c+primPiece.getLength()+i<BoardState.cols;i++){
@@ -143,7 +142,6 @@ public class Cost {
                 }
             }
         }
-
         return res;
     }
 }

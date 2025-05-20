@@ -9,7 +9,6 @@ public class Tree implements Comparable<Tree>{
     private int steps;
     private char idMoved;
 
-    // konstruktor
     Tree(BoardState state){
         this.state = state;
         this.children = new ArrayList<Tree>();
@@ -51,16 +50,6 @@ public class Tree implements Comparable<Tree>{
 
     public void generateChildren(){
         Map<Character, ArrayList<Coordinate>> legalMoves = state.generateLegalMoves();
-        // for (Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()) { // debug
-        //     char key = entry.getKey();
-        //     ArrayList<Coordinate> coords = entry.getValue();
-
-        //     System.out.print(key + ": ");
-        //     for (Coordinate coord : coords) {
-        //         System.out.print("(" + coord.r + ", " + coord.c + ") ");
-        //     }
-        //     System.out.println(); // new line after each entry
-        // }
         for(Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()){   
             char currId = entry.getKey();            
             ArrayList<Coordinate> currCoordinates = entry.getValue();

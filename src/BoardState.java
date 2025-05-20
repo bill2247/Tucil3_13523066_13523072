@@ -26,10 +26,6 @@ public class BoardState {
         BoardState.exitCol = c.c;
     }
 
-    // public Coordinate getExitPoint() {
-    //     return new Coordinate(exitRow, exitCol);
-    // }
-
     public BoardState cloneBoardState(){
         BoardState newState = new BoardState(rows, cols);
         newState.board = new char[rows][];
@@ -214,23 +210,6 @@ public class BoardState {
     }
 
     public void printGameState() {
-        // System.out.println("Rows: " + rows);
-        // System.out.println("Cols: " + cols);
-        // System.out.println("Exit Row: " + exitRow);
-        // System.out.println("Exit Col: " + exitCol);
-
-        // System.out.println("Primary Piece: " + (primaryPiece != null ? primaryPiece : "null"));
-
-        // System.out.println("\nPieces:");
-        // for (Map.Entry<Character, Piece> entry : pieces.entrySet()) {
-        //     System.out.println("  " + entry.getKey() + ": " + entry.getValue());
-        // }
-
-        // System.out.println("\nPieces Location:");
-        // for (Map.Entry<Character, Coordinate> entry : piecesLocation.entrySet()) {
-        //     System.out.println("  " + entry.getKey() + ": " + entry.getValue());
-        // }
-
         System.out.println("\nBoard:");
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {

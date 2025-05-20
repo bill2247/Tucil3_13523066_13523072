@@ -38,37 +38,6 @@ public class Validation {
      * Jika horizontal, periksa semua sel di kanan piece sampai exit.
      * Jika vertical, periksa semua sel di bawah piece sampai exit.
      */
-    // private boolean validation2() {
-    //     char[][] matrix = boardState.getBoard();
-
-    //     if (primaryPiece.getOrientation() == Orientation.HORIZONTAL) {
-    //         int row = primaryPiece.getUpLeft().c;
-    //         int startCol = primaryPiece.getUpLeft().r + primaryPiece.getLength();
-    //         // jika cell yang dicek hanya 1, lewati
-    //         if (startCol == BoardState.cols - 1) {
-    //             return true;
-    //         }
-    //         for (int col = startCol; col < BoardState.cols; col++) {
-    //             if (matrix[row][col] != '.') {
-    //                 throw new IllegalStateException("There is a block in the way of the primary piece (horizontal).");
-    //             }
-    //         }
-    //     } else {
-    //         int col = primaryPiece.getUpLeft().r;
-    //         int startRow = primaryPiece.getUpLeft().c + primaryPiece.getLength();
-    //         // jika cell yang dicek hanya 1, lewati
-    //         if (startRow == BoardState.rows - 1){
-    //             return true;
-    //         }
-    //         for (int row = startRow; row < BoardState.rows; row++) {
-    //             if (matrix[row][col] != '.') {
-    //                 throw new IllegalStateException("There is a block in the way of the primary piece (vertical).");
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
-
     private boolean validation2(){
             boolean res = true; 
             if (primaryPiece.getOrientation() == Orientation.HORIZONTAL) {
@@ -107,18 +76,21 @@ public class Validation {
             int pry = BoardState.primaryPiece.upLeft.c;
             int prx = BoardState.primaryPiece.upLeft.r;
             int len = BoardState.primaryPiece.length;
-    
+            
+            System.out.println("orientation: " + BoardState.primaryPiece.orientation);
             if (ex < pry){
                 char[][] matrix = boardState.getBoard();
                 for (int i = ex+2; i < pry; i ++){
-                    if (matrix[i][prx] == matrix[i-1][prx]){
+                    if (matrix[prx][i] == matrix[prx][i-1]){
+                        System.out.println("a");
                         throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point: " + matrix[i][prx]);
                     }
                 }
             } else {
                 char[][] matrix = boardState.getBoard();
                 for (int i = pry+len+1; i < ex; i ++){
-                    if (matrix[i][prx] == matrix[i-1][prx]){
+                    if (matrix[prx][i] == matrix[prx][i-1]){
+                        System.out.println("b");
                         throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point: " + matrix[i][prx]);
                     }
                 }
@@ -133,6 +105,7 @@ public class Validation {
                 char[][] matrix = boardState.getBoard();
                 for (int i = ex+2; i < pry; i ++){
                     if (matrix[i][pry] == matrix[i-1][pry]){
+                        System.out.println("c");
                         throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point: " + matrix[i][pry]);
                     }
                 }
@@ -140,6 +113,7 @@ public class Validation {
                 char[][] matrix = boardState.getBoard();
                 for (int i = pry+len+1; i < ex; i ++){
                     if (matrix[i][pry] == matrix[i-1][pry]){
+                        System.out.println("d");
                         throw new NullPointerException("There is a block (same orientation with piece) in the way of primary piece to exit point: " + matrix[i][pry]);
                     }
                 }
@@ -167,6 +141,7 @@ public class Validation {
             Piece piece = entry.getValue();
             if (piece.getOrientation() != orientation) {
                 if (piece.getLength() > h) {
+                    System.out.println("h   : " + h);
                     int rowPiece = piece.getUpLeft().r;
                     int colPiece = piece.getUpLeft().c;
                     int rowExit = BoardState.exitRow;
@@ -185,6 +160,7 @@ public class Validation {
             }
         }
         if (found) {
+            System.out.println("exitRow: " + BoardState.exitRow);
             throw new NullPointerException("There is a block (different orientation with piece) that is too long to exit point");
         }
         return true;

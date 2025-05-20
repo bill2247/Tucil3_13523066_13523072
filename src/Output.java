@@ -31,6 +31,10 @@ public class Output {
     }
 
     public void printBoard(){
+        if (root == null){
+            System.out.println("Tidak ditemukan solusi!");
+            return;
+        }
         if (root.getParent() == null){
             printRootNode(root);
         } else {
@@ -86,10 +90,8 @@ public class Output {
             }
         }
         char idMoved = node.getIdMoved();
-        // System.out.println("id moved: " + idMoved);
         Coordinate piece = node.getState().getPiecesLocation().get(idMoved);
         int length = BoardState.pieces.get(idMoved).getLength();
-        // System.out.println("length: " + length);
         char moveType = node.getMoveType();
         int steps = node.getSteps();
         if (exitPosition == 'l'){
@@ -145,7 +147,6 @@ public class Output {
     private char[][] addExitPointInBoard(char[][] board, Coordinate exitPoint){
         int row = exitPoint.r;
         int col = exitPoint.c;
-        // System.out.println("exitPoint: " + row + " " + col);
         if (row == -1){
             char[][] newBoard = new char[BoardState.rows+1][BoardState.cols];
             for (int i = 0; i < BoardState.cols; i++){
@@ -155,7 +156,6 @@ public class Output {
             for (int i = 1; i < BoardState.rows+1; i++){
                 newBoard[i] = board[i-1];
             }
-            printBoard(newBoard);
             return newBoard;
         } else if (col == -1){
             char[][] newBoard = new char[BoardState.rows][BoardState.cols+1];
@@ -193,14 +193,5 @@ public class Output {
             return newBoard;
         } 
         return board;
-    }
-
-    private void printBoard(char[][] board){
-        for (int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                System.out.print(board[i][j]);
-            }
-            System.out.println();
-        }
     }
 }

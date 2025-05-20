@@ -112,7 +112,6 @@ public class InputFile {
         int up = totalRows;
         int down = 1;
         if (exitAlreadyFound) {
-            // up = totalRows + 1;
             down = 0;
         }
         for (int i = down; i < up; i++) {

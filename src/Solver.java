@@ -1,5 +1,4 @@
 import java.util.*;
-// import java.util.function.*;
 
 public class Solver {
     public int algorithm; // 1. UCS, 2.GBFS, 3.A*
@@ -31,6 +30,9 @@ public class Solver {
     }
 
     public static Tree generatePath(Tree goalNode){
+        if (goalNode == null) {
+            return null;
+        }
         ArrayList<Tree> path = new ArrayList<>();
         Tree current = goalNode;
         while(current != null){
