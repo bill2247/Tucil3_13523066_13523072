@@ -26,12 +26,18 @@ public class Tree implements Comparable<Tree>{
     public char getMoveType(){return this.moveType;}
 
     // setter
-    public void updateChildren(BoardState state, int fn, char mt){
+    public void updateChildren(BoardState state, int fn, char mt, int steps, char idMoved){
         Tree child = new Tree(state);
         child.fn = fn;
         child.moveType = mt;
         child.parent = this;
+        child.steps = steps;
+        child.idMoved = idMoved;
         this.children.add(child);
+    }
+
+    public void setChildren(ArrayList<Tree> children){
+        this.children = children;
     }
 
     @Override
@@ -45,26 +51,19 @@ public class Tree implements Comparable<Tree>{
 
     public void generateChildren(){
         Map<Character, ArrayList<Coordinate>> legalMoves = state.generateLegalMoves();
-        // debug
-        System.out.println("--------------");
-        for (Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()) {
-            char key = entry.getKey();
-            ArrayList<Coordinate> coords = entry.getValue();
+        // for (Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()) { // debug
+        //     char key = entry.getKey();
+        //     ArrayList<Coordinate> coords = entry.getValue();
 
-            System.out.print(key + ": ");
-            for (Coordinate coord : coords) {
-                System.out.print("(" + coord.r + ", " + coord.c + ") ");
-            }
-            System.out.println(); // new line after each entry
-        }
-        System.out.println("--------------");
-        // System.exit(0); // debug
-        int debug=0; // debug
-        for(Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()){
+        //     System.out.print(key + ": ");
+        //     for (Coordinate coord : coords) {
+        //         System.out.print("(" + coord.r + ", " + coord.c + ") ");
+        //     }
+        //     System.out.println(); // new line after each entry
+        // }
+        for(Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()){   
             char currId = entry.getKey();            
             ArrayList<Coordinate> currCoordinates = entry.getValue();
-            System.out.println(debug); // debug
-            debug++; // debug
 
             for(int i=0;i<currCoordinates.size();i++){
                 int r = currCoordinates.get(i).r;
@@ -82,18 +81,21 @@ public class Tree implements Comparable<Tree>{
 
                 // movement
                 newState.deletePiece(currId);
-                System.out.println("id: " + currId);
-                System.out.println("r : " + r);
-                System.out.println("c : " + c);
                 newState.addPiece(currId, r, c);
 
                 int fn = Cost.f(newState);
-                System.out.println("fn: " + fn);
-                newState.printGameState();
-                updateChildren(newState, fn, mt);
+
+                int steps = Math.abs(oldR - r) + Math.abs(oldC - c);
+                if(r==-1 && c==-1){
+                    if(BoardState.pieces.get('P').getOrientation() == Orientation.HORIZONTAL){
+                        steps = Math.abs(oldC - c);
+                    } else{
+                        steps = Math.abs(oldR - r);
+                    }
+                }
+                updateChildren(newState, fn, mt, steps, currId);
             }
         }
-        System.exit(0); // debug
     }
     // getter idMoved
     public char getIdMoved(){

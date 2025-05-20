@@ -6,22 +6,27 @@ public class Solver {
 
     public Tree solve(Tree t){
         PriorityQueue<Tree> pq = new PriorityQueue<>();
-        Set<Tree> visited = new HashSet<>();
+        Set<BoardState> visited = new HashSet<>();
 
         pq.add(t);
+        // Scanner scanner = new Scanner(System.in);  // debug
         while(pq.isEmpty()==false){
-            // -------------- debug --------------
-            System.out.println("kusanagi");
-
             Tree currentNode = pq.poll();
             if(currentNode.isGoal()){
+                System.out.println("Node  : " + currentNode);
+                System.out.println("Parent: " + currentNode.getParent());
+                currentNode.getState().printGameState(); // debug
                 return currentNode;
             }
+            System.out.println("Node  : " + currentNode);
+            System.out.println("Parent: " + currentNode.getParent());
+            currentNode.getState().printGameState(); // debug
+            // String name = scanner.nextLine(); // debug
 
-            visited.add(currentNode);
+            visited.add(currentNode.getState());
             currentNode.generateChildren();
             for(Tree childNode : currentNode.getChildren()){
-                if(visited.contains(childNode)==false){
+                if(visited.contains(childNode.getState())==false){
                     pq.add(childNode);
                 }
             }
@@ -30,7 +35,13 @@ public class Solver {
         return null;
     }
 
-    public static ArrayList<Tree> generatePath(Tree goalNode){
+    public static Tree generatePath(Tree goalNode){
+        System.out.println("kusanagi2");
+        System.out.println("Node  : " + goalNode);
+        System.out.println("Parent: " + goalNode.getParent());
+        goalNode.getState().printGameState(); // debug
+
+
         ArrayList<Tree> path = new ArrayList<>();
         Tree current = goalNode;
         while(current != null){
@@ -38,6 +49,14 @@ public class Solver {
             current=current.getParent();
         }
         Collections.reverse(path);
-        return path;
+
+        for(int i=0;i<path.size()-1;i++){
+            ArrayList<Tree> child = new ArrayList<>();
+            child.add(path.get(i+1));
+            path.get(i).setChildren(child);
+        }
+        ArrayList<Tree> nochild = new ArrayList<>();
+        path.get(path.size()-1).setChildren(nochild);
+        return path.get(0);
     }
 }

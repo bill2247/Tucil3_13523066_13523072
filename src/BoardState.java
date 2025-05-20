@@ -100,7 +100,12 @@ public class BoardState {
 
     public void addPiece(char id, int r, int c){
         // menambahkan piece ke papan diberikan id dan lokasi kiri-atas nya
-        if(board[r][c] != '.' || (r==-1 && c==-1)){
+        if((r==-1 && c==-1)){
+            Coordinate currentCoordinate = new Coordinate(r, c);
+            piecesLocation.put(id, currentCoordinate);
+            return;
+        }
+        if(board[r][c] != '.'){
             return;
         }
         Piece currentPiece = pieces.get(id);
@@ -233,5 +238,26 @@ public class BoardState {
             }
             System.out.println();
         }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof BoardState)) return false;
+        BoardState o = (BoardState) obj;
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(this.board[i][j] != o.board[i][j]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(this.board);
     }
 }

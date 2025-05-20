@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Output {
     private Tree root;
     public static final String RESET = "\u001B[0m";

@@ -73,9 +73,54 @@ public class Main {
         Solver solver = new Solver();
         
         Tree goal = solver.solve(tree);
-        // ArrayList<Tree> path = solver.generatePath(goal);
+        System.out.println("kusanagi");
+        System.out.println("Node  : " + goal);
+        System.out.println("Parent: " + goal.getParent());
+        goal.getState().printGameState(); // debug
+
+        // Tree path = solver.generatePath(goal);
+
+        // ------------------------ res ------------------------
+        ArrayList<Tree> path = new ArrayList<>();
+        Tree current = goal;
+        while(current != null){
+            path.add(current);
+            current=current.getParent();
+        }
+        Collections.reverse(path);
+
+        for(int i=0;i<path.size()-1;i++){
+            ArrayList<Tree> child = new ArrayList<>();
+            child.add(path.get(i+1));
+            path.get(i).setChildren(child);
+        }
+        ArrayList<Tree> nochild = new ArrayList<>();
+        path.get(path.size()-1).setChildren(nochild);
+        
+        Tree res = path.get(0);
+
+        System.out.println("kusanagi3");
+        System.out.println("Node  : " + res);
+        System.out.println("Parent: " + res.getParent());
+        res.getState().printGameState(); // debug
+
+        Tree currentNode = res;
+        Scanner scanner = new Scanner(System.in);
+        while(currentNode.getChildren().size()>0){
+            System.out.println("---------------------");
+            currentNode.getState().printGameState();
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^");
+            String name = scanner.nextLine(); // debug
+            currentNode = currentNode.getChildren().get(0);
+        }
+        System.out.println("---------------------");
+        currentNode.getState().printGameState();
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^");
+       
+        // System.exit(0);
         // // output
-        // Output output = new Output(tree);
-        // output.printBoard();
+        System.out.println("--------------------------");
+        Output output = new Output(res);
+        output.printBoard();
     }
 }
