@@ -12,7 +12,7 @@ public class InputFile {
     private final String filePath;
     private final BoardState boardState;
 
-    public InputFile(String filePath) {
+    public InputFile(String filePath) throws IOException {
         this.filePath = filePath;
         this.boardState = new BoardState(0, 0);
         loadBoardFromFile();
@@ -33,7 +33,7 @@ public class InputFile {
         boardState.setPiecesLocation(piecesLocation);
     }
 
-    private void loadBoardFromFile() {
+    private void loadBoardFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             int rows = 0, cols = 0;
             int expectedPieces;
@@ -77,7 +77,7 @@ public class InputFile {
             addPiecesLocation();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
     }
 

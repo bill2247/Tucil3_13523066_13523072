@@ -9,6 +9,16 @@ public class Cost {
         Cost.stateBefore = stateBefore;
     }
 
+    public Cost(){
+        Cost.algorithm = 0;
+        Cost.stateBefore = null;
+    }
+
+    public void resetStatic(){
+        Cost.algorithm = 0;
+        Cost.stateBefore = null;
+    }
+
     public static int f(BoardState state){
         if(algorithm==1){
             return g(state);

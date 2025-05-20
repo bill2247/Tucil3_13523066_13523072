@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,27 +11,35 @@ public class Main {
             boolean isValidatingFile = true;
             BoardState boardState = new BoardState(1,1);
             boardState.resetStatic();
+            Cost cost = new Cost();
+            cost.resetStatic();
             while(isValidatingFile){
-                System.out.print("Nama File Input: ");
-                filePath = scanner.nextLine();
-                if (filePath.equals("exit")) {
-                    System.out.println("Keluar dari program...");
-                    return;
-                }
-                if (filePath.endsWith(".txt")) {
-                    try {
-                        InputFile inputFile = new InputFile("test/" + filePath);
-                        boardState = inputFile.getBoardState();
-                        Validation val = new Validation(boardState);
-                    } catch (Exception e) {
-                        System.out.println("^Ditemukan kesalahan pada file: " + e.getMessage());
-                        continue;
+                try{
+                    System.out.print("Nama File Input: ");
+                    filePath = scanner.nextLine();
+                    if (filePath.equals("exit")) {
+                        System.out.println("Keluar dari program...");
+                        return;
                     }
-                    isValidatingFile = false;
-                } else {
-                    System.out.println("File tidak valid. Silakan masukan kembali file *.txt");
+                    if (filePath.endsWith(".txt")) {
+                        try {
+                            InputFile inputFile = new InputFile("test/" + filePath);
+                            boardState = inputFile.getBoardState();
+                            Validation val = new Validation(boardState);
+                            isValidatingFile = false;
+                        } catch (Exception e) {
+                            System.out.println("^Ditemukan kesalahan pada file: " + e.getMessage());
+                            isValidatingFile = true;
+                        }
+                    } else {
+                        System.out.println("File tidak valid. Silakan masukan kembali file *.txt");
+                    }
+                } catch(Exception e){
+                    System.out.println("^Ditemukan kesalahan: " + e.getMessage());
+                    isValidatingFile = true;
                 }
             }
+            
             System.out.println("-----ALGORITMA PENCARIAN-----");
             System.out.println("1. Uniform Cost Search (UCS)");
             System.out.println("2. Greedy Best First Search");
@@ -58,7 +67,7 @@ public class Main {
             // Pencarian Solusi
             // Root node, kondisi awal
             Tree tree = new Tree(boardState);
-            Cost cost = new Cost(algorithmCode, tree.getState());
+            cost = new Cost(algorithmCode, tree.getState());
             Solver solver = new Solver();
         
             System.out.println("Mencari solusi...");
