@@ -77,6 +77,7 @@ public class BoardState {
     }
 
     public void setBoard(char[][] board) {
+        this.board = new char[rows][];
         for (int i = 0; i < rows; i++) {
             this.board[i] = board[i].clone();
         }

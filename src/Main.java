@@ -30,6 +30,12 @@ public class Main {
         // hitung waktu unutk menjalankan validasi
         long startTime = System.currentTimeMillis();
         Validation val = new Validation(boardState);
+        try {
+            val.validation();
+        } catch (IllegalStateException e) {
+            System.out.println("Validation Error: " + e.getMessage());
+            return;
+        }
         long endTime = System.currentTimeMillis();
         System.out.println("Validation Time: " + (endTime - startTime) + " ms");
         
@@ -49,5 +55,8 @@ public class Main {
         // Print the initial state of the tree
         System.out.println("Initial Tree State:");
         System.out.println(tree.getState());
+        // output
+        Output output = new Output(tree);
+        output.printBoard();
     }
 }

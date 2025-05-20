@@ -9,7 +9,8 @@ public class Validation {
         this.boardState = boardState;
         this.primaryPiece = BoardState.primaryPiece;
         this.isExitPointHorizontal = BoardState.exitCol == 0 || BoardState.exitCol == BoardState.cols - 1;
-
+    }
+    public void validation(){
         validation1();
         validation2();
         validation3();

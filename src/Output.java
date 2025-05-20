@@ -10,8 +10,12 @@ public class Output {
     public Output(Tree root){
         this.root = root;
     }
-       
-    private void printBoard(Tree node, int i){
+
+    public void printBoard(){
+        printBoardHelper(root, 0);
+    }
+
+    private void printBoardHelper(Tree node, int i){
         if (node == null){
             return;
         }
@@ -27,7 +31,7 @@ public class Output {
             }
             System.out.println();
         }
-        printBoard(node.getChildren().get(0), i+1);
+        printBoardHelper(node.getChildren().get(0), i+1);
     }
 
     private String[][] boardCharToString(Tree node){
