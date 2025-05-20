@@ -2,23 +2,32 @@ import java.util.Map;
 
 public class Cost {
     public static int algorithm; // 1. UCS, 2.GBFS, 3.A*
+    public static BoardState stateBefore;
 
-    public Cost(int algorithm){
+    public Cost(int algorithm, BoardState stateBefore){
         Cost.algorithm = algorithm;
+        Cost.stateBefore = stateBefore;
     }
 
     public static int f(BoardState state){
-        // sesuaikan dengan algo
+        if(algorithm==1){
+            return g(state);
+        } else if(algorithm==2){
+            return h(state);
+        } else if(algorithm==3){
+            return g(state)+h(state);
+        }
         return 0;
     }
 
-    public static int g(BoardState stateBefore, BoardState stateAfter){
+    public static int g(BoardState stateAfter){
         /***
          * definisi g(n)
          * g(n) = G(n-1) - G(n)
          * dengan G(n) adalah fungsi pembantu
          * G(n) = jumlah mobil di depan atau di belakang mobil x yang berbeda orientasi dengan mobil x, x adalah seluruh mobil yang ada
          */
+        BoardState stateBefore = Cost.stateBefore;
         Map<Character, Piece> pieces = BoardState.pieces;
         int GnBefore = 0;
         int GnAfter = 0;
@@ -90,7 +99,50 @@ public class Cost {
 
     public static int h(BoardState state){
         int res = 0;
-        // ongoing, ghif
+        Piece primPiece = BoardState.pieces.get('P');
+        Coordinate primCoor = new Coordinate();
+        if (state.getPiecesLocation().containsKey('P')){
+            primCoor = state.getPiecesLocation().get('P');
+        } else{
+            return 0;
+        }
+        if(primCoor.r==-1 && primCoor.c==-1){
+            return 0;
+        }
+
+        if(primPiece.getOrientation() == Orientation.HORIZONTAL){
+            if(primCoor.c < BoardState.exitCol){ // exit di sebelah kanan
+                for(int i=0;primCoor.c+primPiece.getLength()+i<BoardState.cols;i++){
+                    char checkId = state.getBoard()[primCoor.r][primCoor.c+primPiece.getLength()+i];
+                    if(checkId!='.'){
+                        res++;
+                    }
+                }
+            } else if(primCoor.c > BoardState.exitCol){ // exit di sebelah kiri
+                for(int i=0;primCoor.c-1-i>=0;i++){
+                    char checkId = state.getBoard()[primCoor.r][primCoor.c-1-i];
+                    if(checkId!='.'){
+                        res++;
+                    }
+                }
+            }
+        } else{
+            if(primCoor.r < BoardState.exitRow){ // exit di sebelah atas
+                for(int i=0;primCoor.r-1-i>=0;i++){
+                    char checkId = state.getBoard()[primCoor.r-1-i][primCoor.c];
+                    if(checkId!='.'){
+                        res++;
+                    }
+                }
+            } else if(primCoor.r > BoardState.exitRow){ // exit di sebelah bawah
+                for(int i=0;primCoor.r+primPiece.getLength()+i<BoardState.rows;i++){
+                    char checkId = state.getBoard()[primCoor.r+primPiece.getLength()+i][primCoor.c];
+                    if(checkId!='.'){
+                        res++;
+                    }
+                }
+            }
+        }
 
         return res;
     }

@@ -14,7 +14,7 @@ public class Tree implements Comparable<Tree>{
         this.state = state;
         this.children = new ArrayList<Tree>();
         this.moveType = ' ';
-        this.fn = 0;
+        this.fn = Cost.f(state);
         this.parent = null;
     }
 
@@ -26,12 +26,18 @@ public class Tree implements Comparable<Tree>{
     public char getMoveType(){return this.moveType;}
 
     // setter
-    public void updateChildren(BoardState state, int fn, char mt){
+    public void updateChildren(BoardState state, int fn, char mt, int steps, char idMoved){
         Tree child = new Tree(state);
         child.fn = fn;
         child.moveType = mt;
         child.parent = this;
+        child.steps = steps;
+        child.idMoved = idMoved;
         this.children.add(child);
+    }
+
+    public void setChildren(ArrayList<Tree> children){
+        this.children = children;
     }
 
     @Override
@@ -45,19 +51,29 @@ public class Tree implements Comparable<Tree>{
 
     public void generateChildren(){
         Map<Character, ArrayList<Coordinate>> legalMoves = state.generateLegalMoves();
-        for(Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()){
+        // for (Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()) { // debug
+        //     char key = entry.getKey();
+        //     ArrayList<Coordinate> coords = entry.getValue();
+
+        //     System.out.print(key + ": ");
+        //     for (Coordinate coord : coords) {
+        //         System.out.print("(" + coord.r + ", " + coord.c + ") ");
+        //     }
+        //     System.out.println(); // new line after each entry
+        // }
+        for(Map.Entry<Character, ArrayList<Coordinate>> entry : legalMoves.entrySet()){   
             char currId = entry.getKey();            
             ArrayList<Coordinate> currCoordinates = entry.getValue();
 
             for(int i=0;i<currCoordinates.size();i++){
-                int r = currCoordinates.get(i).c;
-                int c = currCoordinates.get(i).r;
+                int r = currCoordinates.get(i).r;
+                int c = currCoordinates.get(i).c;
                 BoardState newState = state.cloneBoardState();
 
                 // cek tipe gerakan
                 char mt = ' ';
-                int oldR = state.getPiecesLocation().get(currId).c;
-                int oldC = state.getPiecesLocation().get(currId).r;
+                int oldR = state.getPiecesLocation().get(currId).r;
+                int oldC = state.getPiecesLocation().get(currId).c;
                 if(r>oldR){mt = 'd';}
                 else if(r<oldR){mt = 'u';}
                 else if(c<oldC){mt = 'l';}
@@ -66,8 +82,18 @@ public class Tree implements Comparable<Tree>{
                 // movement
                 newState.deletePiece(currId);
                 newState.addPiece(currId, r, c);
+
                 int fn = Cost.f(newState);
-                updateChildren(newState, fn, mt);
+
+                int steps = Math.abs(oldR - r) + Math.abs(oldC - c);
+                if(r==-1 && c==-1){
+                    if(BoardState.pieces.get('P').getOrientation() == Orientation.HORIZONTAL){
+                        steps = Math.abs(oldC - c);
+                    } else{
+                        steps = Math.abs(oldR - r);
+                    }
+                }
+                updateChildren(newState, fn, mt, steps, currId);
             }
         }
     }
