@@ -42,7 +42,7 @@ public class Piece {
         System.out.println("Piece ID: " + id);
         System.out.println("Orientation: " + orientation);
         System.out.println("Length: " + length);
-        System.out.println("UpLeft Coordinate: (" + upLeft.x + ", " + upLeft.y + ")");
+        System.out.println("UpLeft Coordinate: (" + upLeft.r + ", " + upLeft.c + ")");
     }
 }
 

@@ -90,50 +90,7 @@ public class Cost {
 
     public static int h(BoardState state){
         int res = 0;
-        Piece primPiece = BoardState.pieces.get('P');
-        Coordinate primCoor = new Coordinate();
-        if (state.piecesLocation.containsKey('P')){
-            primCoor = state.piecesLocation.get('P');
-        } else{
-            return 0;
-        }
-        if(primCoor.r==-1 && primCoor.c==-1){
-            return 0;
-        }
-
-        if(primPiece.getOrientation() == Orientation.HORIZONTAL){
-            if(primCoor.c < BoardState.exitCol){ // exit di sebelah kanan
-                for(int i=0;primCoor.c+primPiece.getLength()+i<BoardState.cols;i++){
-                    char checkId = state.getBoard()[primCoor.r][primCoor.c+primPiece.getLength()+i];
-                    if(checkId!='.'){
-                        res++;
-                    }
-                }
-            } else if(primCoor.c > BoardState.exitCol){ // exit di sebelah kiri
-                for(int i=0;primCoor.c-1-i>=0;i++){
-                    char checkId = state.getBoard()[primCoor.r][primCoor.c-1-i];
-                    if(checkId!='.'){
-                        res++;
-                    }
-                }
-            }
-        } else{
-            if(primCoor.r < BoardState.exitRow){ // exit di sebelah atas
-                for(int i=0;primCoor.r-1-i>=0;i++){
-                    char checkId = state.getBoard()[primCoor.r-1-i][primCoor.c];
-                    if(checkId!='.'){
-                        res++;
-                    }
-                }
-            } else if(primCoor.r > BoardState.exitRow){ // exit di sebelah bawah
-                for(int i=0;primCoor.r+primPiece.getLength()+i<BoardState.rows;i++){
-                    char checkId = state.getBoard()[primCoor.r+primPiece.getLength()+i][primCoor.c];
-                    if(checkId!='.'){
-                        res++;
-                    }
-                }
-            }
-        }
+        // ongoing, ghif
 
         return res;
     }

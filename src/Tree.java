@@ -6,6 +6,8 @@ public class Tree {
     private char moveType; // u r d l
     private int fn;
     private Tree parent;
+    private int steps;
+    private char idMoved;
 
     // konstruktor
     Tree(BoardState state){
@@ -58,5 +60,21 @@ public class Tree {
                 updateChildren(newState, fn, mt);
             }
         }
+    }
+    // getter idMoved
+    public char getIdMoved(){
+        return this.idMoved;
+    }
+    // setter idMoved
+    public void setIdMoved(char idMoved){
+        this.idMoved = idMoved;
+    }
+    // getter steps
+    public int getSteps(){
+        return this.steps;
+    }
+    // setter steps
+    public void setSteps(int steps){
+        this.steps = steps;
     }
 }

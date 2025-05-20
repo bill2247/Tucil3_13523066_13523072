@@ -23,11 +23,11 @@ public class Validation {
      */
     private boolean validation1() {
         if (primaryPiece.getOrientation() == Orientation.HORIZONTAL) {
-            if (primaryPiece.getUpLeft().x != BoardState.exitRow) {
+            if (primaryPiece.getUpLeft().r != BoardState.exitRow) {
                 throw new IllegalStateException("Exit point is not in the same row as the primary piece.");
             }
         } else {
-            if (primaryPiece.getUpLeft().y != BoardState.exitCol) {
+            if (primaryPiece.getUpLeft().c != BoardState.exitCol) {
                 throw new IllegalStateException("Exit point is not in the same column as the primary piece.");
             }
         }
@@ -43,8 +43,8 @@ public class Validation {
     //     char[][] matrix = boardState.getBoard();
 
     //     if (primaryPiece.getOrientation() == Orientation.HORIZONTAL) {
-    //         int row = primaryPiece.getUpLeft().y;
-    //         int startCol = primaryPiece.getUpLeft().x + primaryPiece.getLength();
+    //         int row = primaryPiece.getUpLeft().c;
+    //         int startCol = primaryPiece.getUpLeft().r + primaryPiece.getLength();
     //         // jika cell yang dicek hanya 1, lewati
     //         if (startCol == BoardState.cols - 1) {
     //             return true;
@@ -55,8 +55,8 @@ public class Validation {
     //             }
     //         }
     //     } else {
-    //         int col = primaryPiece.getUpLeft().x;
-    //         int startRow = primaryPiece.getUpLeft().y + primaryPiece.getLength();
+    //         int col = primaryPiece.getUpLeft().r;
+    //         int startRow = primaryPiece.getUpLeft().c + primaryPiece.getLength();
     //         // jika cell yang dicek hanya 1, lewati
     //         if (startRow == BoardState.rows - 1){
     //             return true;
@@ -73,8 +73,8 @@ public class Validation {
     private boolean validation2(){
             boolean res = true; // tidak ada blok kosong
             if (primaryPiece.getOrientation() == Orientation.HORIZONTAL) {
-                for (int i = primaryPiece.getUpLeft().y + 1; i < boardState.cols; i++) {
-                    for (int j = primaryPiece.getUpLeft().x; j < primaryPiece.getUpLeft().x + primaryPiece.getLength(); j++) {
+                for (int i = primaryPiece.getUpLeft().c + 1; i < boardState.cols; i++) {
+                    for (int j = primaryPiece.getUpLeft().r; j < primaryPiece.getUpLeft().r + primaryPiece.getLength(); j++) {
                         if (boardState.getBoard()[j][i] != '.') {
                             res = false;
                             break;
@@ -82,9 +82,9 @@ public class Validation {
                     }
                 }
             } else {
-                for (int i = primaryPiece.getUpLeft().x + 1; i < boardState.rows; i++) {
-                    if (boardState.getBoard()[i][primaryPiece.getUpLeft().y] != '.') {
-                        for (int j = primaryPiece.getUpLeft().y; j < primaryPiece.getUpLeft().y + primaryPiece.getLength(); j++) {
+                for (int i = primaryPiece.getUpLeft().r + 1; i < boardState.rows; i++) {
+                    if (boardState.getBoard()[i][primaryPiece.getUpLeft().c] != '.') {
+                        for (int j = primaryPiece.getUpLeft().c; j < primaryPiece.getUpLeft().c + primaryPiece.getLength(); j++) {
                             if (boardState.getBoard()[i][j] != '.') {
                                 res = false;
                                 break;
@@ -105,8 +105,8 @@ public class Validation {
     private boolean validation3() {
          if (BoardState.primaryPiece.orientation == Orientation.HORIZONTAL){
             int ex = BoardState.exitCol;
-            int pry = BoardState.primaryPiece.upLeft.y;
-            int prx = BoardState.primaryPiece.upLeft.x;
+            int pry = BoardState.primaryPiece.upLeft.c;
+            int prx = BoardState.primaryPiece.upLeft.r;
             int len = BoardState.primaryPiece.length;
     
             if (ex < pry){
@@ -128,8 +128,8 @@ public class Validation {
             }
         } else {
             int ex = BoardState.exitRow;
-            int pry = BoardState.primaryPiece.upLeft.y;
-            int prx = BoardState.primaryPiece.upLeft.x;
+            int pry = BoardState.primaryPiece.upLeft.c;
+            int prx = BoardState.primaryPiece.upLeft.r;
             int len = BoardState.primaryPiece.length;
     
             if (ex < pry){
